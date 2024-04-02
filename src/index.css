@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}
+
+/* Tooltip arrow */
+.tooltip-left::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #efefefb9;
+  font-family: "Poppins";
+}
+
+.guest-home {
+  background: url("/guestBg.png");
+  min-height: 100vh;
+  height: fit-content;
+}
+#root {
+}
+@media screen and (max-width: 789px) {
+  .sidebar.opened {
+    left: 0 !important;
+  }
+
+  body:has(.sidebar.opened)::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+}
+
+.checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid #6dab3c;
+  border-radius: 4px;
+  transition: background-color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom:checked {
+  background-color: #6dab3c;
+  border-color: #6dab3c;
+}
+
+.checkbox:checked::before {
+  content: "\2713";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6dab3c;
+  font-size: 1rem;
+}
+
+.radio {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid #6dab3c;
+  border-radius: 50%;
+  transition: background-color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.radio:checked {
+  background: #6dab3c;
+  color: #fff;
+}
+
+.radio:checked::before {
+  content: "\2713";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+/* Hide FullCalendar navigation buttons */
+.fc-prev-button,
+.fc-next-button,
+.fc-today-button {
+  display: none;
+}
