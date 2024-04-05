@@ -13,12 +13,6 @@ export const assignPermissionsSchema = z.object({
       invalid_type_error: "Select at least one role",
     })
     .optional(),
-  permissions: z
-    .array(z.string(), {
-      required_error: "Select at least one role",
-      invalid_type_error: "Select at least one role",
-    })
-    .optional(),
 });
 
 export const updateUserSchema = z.object({

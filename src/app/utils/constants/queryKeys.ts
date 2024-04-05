@@ -12,3 +12,5 @@ export const UPDATE_PASSWORD = ["update_password"];
 export const DASHBOARD = ["dashboard"];
 export const UPDATE_USERS_PROFILE = ["update_users_profile"];
 export const IMPORT_USERS = ["import_users"];
+
+export const INSTITUTIONS = ["institutions"];

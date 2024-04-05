@@ -1,10 +1,10 @@
 const appPersmissions = [
   {
-    group: "Institutions",
+    group: "INSTITUTIONS",
     permissions: ["VIEW_INSTITUTIONS", "UPDATE_INSTITUTIONS"],
   },
   {
-    group: "Users",
+    group: "USERS",
     permissions: ["VIEW_USERS", "UPDATE_USERS", "CHANGE_USERS_PERMISSIONS"],
   },
   {
@@ -14,6 +14,14 @@ const appPersmissions = [
   {
     group: "ADMIN",
     permissions: ["INSTITUTION_ADMIN"],
+  },
+  {
+    group: "MEDECINES",
+    permissions: ["VIEW_MEDECINES", "UPDATE_MEDECINES"],
+  },
+  {
+    group: "PATIENTS",
+    permissions: ["VIEW_PATIENTS", "UPDATE_PATIENTS"],
   },
 ] as const;
 

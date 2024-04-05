@@ -1,8 +1,7 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import {
   ArrowRightOnRectangleIcon,
-  BellIcon,
   Cog6ToothIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -11,6 +10,8 @@ import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import ProfileAvatar from "./ProfileAvatar";
 import { AuthContext } from "../../context/Auth";
+import Modal from "../common/Modal";
+import ChangeInstitutionForm from "../auth/ChangeInstitution";
 
 function classNames(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -25,17 +26,25 @@ export default function DashTop() {
   };
   const user = useContext(AuthContext)?.userProfile;
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       <div>
         <div className='ml-4 flex items-center md:ml-6'>
-          <button
-            type='button'
-            className='rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2'
-          >
-            <span className='sr-only'>View notifications</span>
-            <BellIcon className='h-6 w-6' aria-hidden='true' />
-          </button>
+          {user && (
+            <Modal
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              title='Change institution'
+            >
+              <ChangeInstitutionForm
+                institutions={user?.institutions || []}
+                selected={user?.institutionId || ""}
+                setIsOpen={setIsOpen}
+              />
+            </Modal>
+          )}
 
           <Menu as='div' className='relative ml-3'>
             <div>
@@ -79,22 +88,25 @@ export default function DashTop() {
                     </a>
                   )}
                 </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href='#'
-                      className={classNames(
-                        active ? "bg-gray-100" : "",
-                        "block px-4 py-2 text-sm text-gray-700",
-                      )}
-                    >
-                      <span className='flex'>
-                        <Cog6ToothIcon className='w-6 text-darkblue stroke-1' />
-                        <p className='pl-2'> Settings</p>
-                      </span>{" "}
-                    </a>
-                  )}
-                </Menu.Item>
+                {user && user.institutions.length > 0 && (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        href='#'
+                        className={classNames(
+                          active ? "bg-gray-100" : "",
+                          "block px-4 py-2 text-sm text-gray-700",
+                        )}
+                      >
+                        <span className='flex' onClick={() => setIsOpen(true)}>
+                          <Cog6ToothIcon className='w-6 text-darkblue stroke-1' />
+                          <p className='pl-2'> Change Institution</p>
+                        </span>
+                      </a>
+                    )}
+                  </Menu.Item>
+                )}
+
                 <Menu.Item>
                   {({ active }) => (
                     <span

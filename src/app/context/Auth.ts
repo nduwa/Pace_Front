@@ -1,9 +1,9 @@
 import { Permission, PermissionGroup } from "../constants/permissions";
-import { IUserProfile, IUserWithPermissions } from "./../types/common.d";
+import { IUserWithPermissions } from "./../types/common.d";
 import { createContext } from "react";
 
 export interface IAuthContext {
-  userProfile: IUserProfile | undefined;
+  userProfile: IUserWithPermissions | undefined;
   setUserProfile: (userProfile: IUserWithPermissions) => void;
   permissionsGroups: PermissionGroup[];
   permissions: Permission[];
