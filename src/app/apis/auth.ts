@@ -4,7 +4,7 @@ import {
   IResetPasswordRequest,
   IUpdatePasswordFormData,
 } from "../types/auth";
-import { AuthState } from "./../types/common.d";
+import { AuthState, ChangeInstitution } from "./../types/common.d";
 import api from "./api";
 
 export const login = async (formData: ILoginFormData): Promise<AuthState> => {
@@ -24,5 +24,10 @@ export const resetPasswordRequest = async (data: IResetPasswordRequest) => {
 
 export const resetPassword = async (data: IResetPassword) => {
   const response = await api.post("/auth/reset-password", data);
+  return response.data;
+};
+
+export const changeInstitution = async (data: ChangeInstitution) => {
+  const response = await api.post("/auth/change-institution", data);
   return response.data;
 };

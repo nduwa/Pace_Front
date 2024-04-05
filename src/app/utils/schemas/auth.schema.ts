@@ -56,3 +56,7 @@ export const UpdatePasswordSchema: ZodType<IUpdatePasswordFormData> = z.object({
     })
     .min(6, "Password should be at least 6 characters"),
 });
+
+export const changeInstitutionSchema = z.object({
+  institutionId: z.string().min(1, "Select one"),
+});

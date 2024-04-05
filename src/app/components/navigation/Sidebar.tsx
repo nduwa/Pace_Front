@@ -1,4 +1,10 @@
-import { UsersIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {
+  BuildingOffice2Icon,
+  ChartBarIcon,
+  ShieldCheckIcon,
+  UsersIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import SidebarLink from "./SidebarLink";
 import ToggleSidebar from "../../helpers/ToggleSidebar";
 import logo from "../../assets/logo-color.png";
@@ -16,11 +22,33 @@ const Sidebar = () => {
             </button>
           </div>
           <div className='py-2 h-full overflow-y-auto w-full px-4'>
-            {HasPermissionGroup("Users") && (
+            <SidebarLink
+              text='Dashboard'
+              to='/'
+              Icon={<ChartBarIcon className='w-5 stroke-2 text-white' />}
+            />
+
+            {HasPermissionGroup("USERS") && (
               <SidebarLink
                 text='Users'
                 to='/users'
                 Icon={<UsersIcon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
+            {HasPermissionGroup("INSTITUTIONS", true) && (
+              <SidebarLink
+                text='Institutions'
+                to='/institutions'
+                Icon={<BuildingOffice2Icon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
+            {HasPermissionGroup("ADMIN") && (
+              <SidebarLink
+                text='Roles'
+                to='/roles'
+                Icon={<ShieldCheckIcon className='w-5 stroke-2 text-white' />}
               />
             )}
           </div>
