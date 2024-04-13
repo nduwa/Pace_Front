@@ -1,6 +1,7 @@
 import {
   BuildingOffice2Icon,
   ChartBarIcon,
+  EyeDropperIcon,
   ShieldCheckIcon,
   UsersIcon,
   XCircleIcon,
@@ -41,6 +42,14 @@ const Sidebar = () => {
                 text='Institutions'
                 to='/institutions'
                 Icon={<BuildingOffice2Icon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
+            {HasPermissionGroup("MEDECINES") && (
+              <SidebarLink
+                text='Drugs'
+                to='/drugs'
+                Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
               />
             )}
 

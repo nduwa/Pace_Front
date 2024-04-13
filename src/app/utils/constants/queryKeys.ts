@@ -13,4 +13,11 @@ export const DASHBOARD = ["dashboard"];
 export const UPDATE_USERS_PROFILE = ["update_users_profile"];
 export const IMPORT_USERS = ["import_users"];
 
+export const INSTITUTION = ["institution"];
 export const INSTITUTIONS = ["institutions"];
+export const INSTITUTIONS_NPAGED = ["institutions_npaged"];
+export const DRUG = ["drug"];
+export const DRUGS = ["drugs"];
+export const DRUGS_NPAGED = ["drugs_npaged"];
+export const DRUGS_CATEGORIES = ["drugs_categories"];
+export const IMPORT_DRUGS = ["import_drugs"];
