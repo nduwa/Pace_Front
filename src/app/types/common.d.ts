@@ -124,3 +124,12 @@ export interface RoleResponseDTO extends IRole {
 export interface ChangeInstitution {
   institutionId: string;
 }
+
+export interface IImport {
+  file: FormData;
+}
+
+export interface IImportResult {
+  message: string;
+  failed: string[];
+}
