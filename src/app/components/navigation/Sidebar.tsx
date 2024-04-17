@@ -3,6 +3,7 @@ import {
   ChartBarIcon,
   EyeDropperIcon,
   ShieldCheckIcon,
+  Square3Stack3DIcon,
   UsersIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -10,6 +11,7 @@ import SidebarLink from "./SidebarLink";
 import ToggleSidebar from "../../helpers/ToggleSidebar";
 import logo from "../../assets/logo-color.png";
 import { HasPermissionGroup } from "../../helpers/HasPermissionGroup";
+import SidebarDropdownLink from "./SidebarDropdownLink";
 
 const Sidebar = () => {
   return (
@@ -50,6 +52,24 @@ const Sidebar = () => {
                 text='Drugs'
                 to='/drugs'
                 Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
+            {HasPermissionGroup("MEDECINES") && (
+              <SidebarDropdownLink
+                text='Purchases'
+                to='/drugs/purchases'
+                Icon={<Square3Stack3DIcon className='w-5 stroke-2 text-white' />}
+                links={[
+                  {
+                    label: "Purchases",
+                    to: "/drugs/purchases",
+                  },
+                  {
+                    label: "Add purchase",
+                    to: "/drugs/purchases/add",
+                  },
+                ]}
               />
             )}
 

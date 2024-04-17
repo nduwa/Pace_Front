@@ -119,6 +119,10 @@ const DrugsPage = () => {
       key: "price",
     },
     {
+      title: "Quantity",
+      key: "totalQuantity",
+    },
+    {
       title: "On Market",
       key: "",
       render: (row: IDrug) => (
