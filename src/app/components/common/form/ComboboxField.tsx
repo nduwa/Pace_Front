@@ -54,7 +54,7 @@ const ComboboxField: FC<IOptionsField> = ({
   }, [defaultValue, options]);
 
   return (
-    <div className=''>
+    <div className='block w-full'>
       {label && (
         <label className='block text-sm font-medium leading-6 text-gray-900'>
           {label}
@@ -111,6 +111,7 @@ const ComboboxField: FC<IOptionsField> = ({
                       {({ selected, active }) => (
                         <>
                           <span
+                            title={option.label}
                             className={`block truncate ${
                               selected ? "font-medium" : "font-normal"
                             }`}

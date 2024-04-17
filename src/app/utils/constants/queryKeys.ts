@@ -20,4 +20,6 @@ export const DRUG = ["drug"];
 export const DRUGS = ["drugs"];
 export const DRUGS_NPAGED = ["drugs_npaged"];
 export const DRUGS_CATEGORIES = ["drugs_categories"];
-export const IMPORT_DRUGS = ["import_drugs"];
+export const PURCHASES = ["purchases"];
+export const PURCHASE = ["purchase"];
+export const PURCHASE_DRUGS = ["purchase_drugs"];

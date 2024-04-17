@@ -5,7 +5,7 @@ const appPersmissions = [
   },
   {
     group: "USERS",
-    permissions: ["VIEW_USERS", "UPDATE_USERS", "CHANGE_USERS_PERMISSIONS"],
+    permissions: ["VIEW_USERS", "UPDATE_USERS"],
   },
   {
     group: "SUDO",
