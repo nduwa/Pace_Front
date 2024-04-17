@@ -14,7 +14,7 @@ import TableActions from "../../components/table/TableActions";
 const PurchaseActions = () => {
   return (
     <Protected permissions={["PURCHASE_MEDECINES"]}>
-      <Button to='/drugs/purchase/add' label='Puchase' />
+      <Button to='/drugs/purchases/add' label='Puchase' />
     </Protected>
   );
 };

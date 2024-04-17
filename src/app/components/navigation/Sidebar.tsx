@@ -3,7 +3,6 @@ import {
   ChartBarIcon,
   EyeDropperIcon,
   ShieldCheckIcon,
-  Square3Stack3DIcon,
   UsersIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -12,8 +11,11 @@ import ToggleSidebar from "../../helpers/ToggleSidebar";
 import logo from "../../assets/logo-color.png";
 import { HasPermissionGroup } from "../../helpers/HasPermissionGroup";
 import SidebarDropdownLink from "./SidebarDropdownLink";
+import Protected from "../auth/Protected";
+import { HasPermission } from "../../helpers/HasPermission";
 
 const Sidebar = () => {
+  const isSudo = HasPermission(["ALL_PERMISSIONS"], true);
   return (
     <div className='min-h-screen'>
       <div className='sidebar w-60 flex overflow-x-clip flex-col h-full justify-between border shadow duration-300 z-10 sidebar fixed top-0 bottom-0 left-[-300px] md:left-0 bg-darkblue'>
@@ -46,8 +48,7 @@ const Sidebar = () => {
                 Icon={<BuildingOffice2Icon className='w-5 stroke-2 text-white' />}
               />
             )}
-
-            {HasPermissionGroup("MEDECINES") && (
+            {isSudo && (
               <SidebarLink
                 text='Drugs'
                 to='/drugs'
@@ -55,24 +56,32 @@ const Sidebar = () => {
               />
             )}
 
-            {HasPermissionGroup("MEDECINES") && (
-              <SidebarDropdownLink
-                text='Purchases'
-                to='/drugs/purchases'
-                Icon={<Square3Stack3DIcon className='w-5 stroke-2 text-white' />}
-                links={[
-                  {
-                    label: "Purchases",
-                    to: "/drugs/purchases",
-                  },
-                  {
-                    label: "Add purchase",
-                    to: "/drugs/purchases/add",
-                  },
-                ]}
-              />
+            {!isSudo && (
+              <Protected permissions={["VIEW_MEDECINES", "PURCHASE_MEDECINES"]}>
+                <SidebarDropdownLink
+                  text='Drugs'
+                  to='/drugs'
+                  Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                  links={[
+                    {
+                      label: "Drugs",
+                      to: "/drugs",
+                      permissions: ["VIEW_MEDECINES"],
+                    },
+                    {
+                      label: "Purchases",
+                      to: "/drugs/purchases",
+                      permissions: ["PURCHASE_MEDECINES"],
+                    },
+                    {
+                      label: "Add purchase",
+                      to: "/drugs/purchases/add",
+                      permissions: ["PURCHASE_MEDECINES"],
+                    },
+                  ]}
+                />
+              </Protected>
             )}
-
             {HasPermissionGroup("ADMIN") && (
               <SidebarLink
                 text='Roles'
