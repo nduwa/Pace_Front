@@ -8,6 +8,7 @@ import { adjustDrugs, getDrugsPurchase } from "../../apis/drug";
 import { PURCHASE_DRUGS } from "../../utils/constants/queryKeys";
 import { purchaseDrugsSchema } from "../../utils/schemas/drug.schema";
 import { IAdjustPurchaseDTO, IDrugPurchase } from "../../types/pharmacy";
+import { format } from "date-fns";
 
 interface IProps {
   data: IDrugPurchase;
@@ -83,6 +84,16 @@ const PurchaseAdjustement: FC<IProps> = ({ data, closeDrawer }) => {
                         className='p-2 outline-none'
                         defaultValue={drug.batchNumber || ""}
                         {...register(`drugs.${index}.batchNumber`)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        placeholder='Expiry Date'
+                        className='p-2 outline-none'
+                        defaultValue={
+                          format(new Date(drug.expireDate || ""), "yyyy-MM-dd") || ""
+                        }
+                        {...register(`drugs.${index}.expireDate`)}
                       />
                     </td>
                   </tr>

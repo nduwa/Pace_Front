@@ -5,20 +5,19 @@ export const drugSchema = z.object({
   description: z.string().min(1, "Description is required"),
   designation: z.string().min(1, "Designation is required"),
   instruction: z.string(),
-  sellingUnit: z.string().min(1, "Selling unit is required"),
-  price: z.coerce.number().min(1, "Price is required"),
+  drugCategory: z.string().min(1, "Selling unit is required"),
 });
 
-const isUniqueDrugStock = (drugs: Array<{ drug: string }>) => {
-  const drugSet = new Set<string>();
-  for (const { drug } of drugs) {
-    if (drugSet.has(drug)) {
-      return false;
-    }
-    drugSet.add(drug);
-  }
-  return true;
-};
+// const isUniqueDrugStock = (drugs: Array<{ drug: string }>) => {
+//   const drugSet = new Set<string>();
+//   for (const { drug } of drugs) {
+//     if (drugSet.has(drug)) {
+//       return false;
+//     }
+//     drugSet.add(drug);
+//   }
+//   return true;
+// };
 
 export const createPurchaseSchema = z.object({
   note: z.string().optional(),
@@ -48,44 +47,25 @@ export const createPurchaseSchema = z.object({
             const num = parseInt(value);
             return num;
           }),
+        batchNumber: z.string().optional(),
+        expireDate: z.string(),
       }),
     )
-    .min(1)
-    .refine((data) => isUniqueDrugStock(data), {
-      message: "Drug must be unique",
-    }),
+    .min(1),
 });
 
-const isBatchNumberUnique = (drugs: Array<{ batchNumber: string }>) => {
-  const drugSet = new Set<string>();
-  for (const { batchNumber } of drugs) {
-    if (drugSet.has(batchNumber!)) {
-      return false;
-    }
-    if (batchNumber.trim().length > 0) {
-      drugSet.add(batchNumber);
-    }
-  }
-  return true;
-};
-
 export const purchaseDrugsSchema = z.object({
-  drugs: z
-    .array(
-      z.object({
-        id: z.string(),
-        batchNumber: z.string().optional(),
-      }),
-    )
-    .refine(
-      (data) =>
-        isBatchNumberUnique(
-          data.map((drug) => ({
-            batchNumber: drug.batchNumber as string,
-          })),
-        ),
-      { message: "Batch numbers has to be unique" },
-    ),
+  drugs: z.array(
+    z.object({
+      id: z.string(),
+      batchNumber: z.string().optional(),
+      expireDate: z.string().optional(),
+    }),
+  ),
 });
 
 export type IPurchaseDrugs = z.infer<typeof purchaseDrugsSchema>;
+
+export const drugCategorySchema = z.object({
+  name: z.string().min(1, "Required"),
+});

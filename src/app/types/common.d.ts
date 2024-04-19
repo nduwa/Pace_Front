@@ -133,3 +133,28 @@ export interface IImportResult {
   message: string;
   failed: string[];
 }
+
+export interface ITransaction {
+  id: string;
+  userId: string;
+  institutionId: string;
+  amount: number;
+  reason: string;
+  reference: string;
+  type: string;
+}
+
+export interface ITransactionRequest
+  extends Omit<ITransaction, "id" | "userId" | "institutionId"> {
+  id?: string;
+}
+
+export interface ITransactionDTO extends ITransaction {
+  user: IUser;
+  institution: IInstitution;
+}
+
+export interface ITransactionResponse {
+  type: string;
+  rows: ITransactionDTO[];
+}

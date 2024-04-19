@@ -3,5 +3,5 @@ import { IDrugFilter } from "../../types/filters";
 
 export const drugFilterSchema: ZodType<IDrugFilter> = z.object({
   isOnMarket: z.string(),
-  sellingUnit: z.string(),
+  drugCategory: z.string(),
 });

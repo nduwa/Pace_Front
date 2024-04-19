@@ -1,5 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState, SetStateAction, Dispatch, FC } from "react";
+import {
+  useEffect,
+  useState,
+  SetStateAction,
+  Dispatch,
+  FC,
+  useContext,
+} from "react";
 import Protected from "../../components/auth/Protected";
 import Button from "../../components/common/form/Button";
 import { IPaged } from "../../types/common";
@@ -14,6 +21,7 @@ import DrugForm from "../../components/drugs/DrugForm";
 import DrugTableActions from "../../components/drugs/DrugTableActions";
 import DrugTableFilters from "../../components/drugs/DrugTableFilters";
 import ImportDrugs from "../../components/drugs/ImportDrugs";
+import { AuthContext } from "../../context/Auth";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -36,6 +44,8 @@ const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
 };
 
 const DrugsPage = () => {
+  const user = useContext(AuthContext)?.userProfile;
+
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<IPaged<IDrugResponse>>();
   const [keyword, setKeyword] = useState<string>();
@@ -93,7 +103,7 @@ const DrugsPage = () => {
   const defaultFilters = data?.data
     ? {
         isOnMarket: data.data.isOnMarket,
-        sellingUnit: data.data.sellingUnit,
+        drugCategory: data.data.drugCategory,
       }
     : undefined;
 
@@ -107,30 +117,12 @@ const DrugsPage = () => {
       key: "designation",
     },
     {
-      title: "Instruction",
-      key: "instruction",
+      title: "Category",
+      key: "drugCategory",
     },
-    {
-      title: "Selling Unit",
-      key: "sellingUnit",
-    },
-    {
-      title: "Price",
-      key: "price",
-    },
-    {
-      title: "Quantity",
-      key: "totalQuantity",
-    },
-    {
-      title: "On Market",
-      key: "",
-      render: (row: IDrug) => (
-        <div className='flex'>
-          <div>{!row.isOnMarket ? "No" : ""}</div>
-        </div>
-      ),
-    },
+    user?.institutionId !== null
+      ? { title: "Quantity", key: "totalQuantity" }
+      : { title: "", key: "" },
     {
       title: "Institution",
       key: "",

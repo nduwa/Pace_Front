@@ -3,6 +3,9 @@ import {
   IAdjustPurchaseDTO,
   ICreatePurchaseDTO,
   IDrug,
+  IDrugCategory,
+  IDrugCategoryRequest,
+  IDrugCategoryResponse,
   IDrugRequest,
   IDrugResponse,
   IInstitutionDrug,
@@ -36,7 +39,7 @@ export const getDrugsNPaged = async (): Promise<IDrug[]> => {
   return (await api.get(`/drugs/all`)).data;
 };
 
-export const getSellingUnits = async (): Promise<string[]> => {
+export const getdrugCategorys = async (): Promise<string[]> => {
   return (await api.get(`/drugs/categories`)).data;
 };
 
@@ -64,4 +67,35 @@ export const getDrugsPurchase = async (
   purchasesId: string,
 ): Promise<IInstitutionDrug[]> => {
   return (await api.get(`/purchases/drugs-purchases/${purchasesId}`)).data;
+};
+
+export const createDrugCategory = async (
+  data: IDrugCategoryRequest,
+): Promise<IDrugCategory> => {
+  return (await api.post("/drug-categories", data)).data;
+};
+
+export const updateDrugCategory = async (
+  data: IDrugCategoryRequest,
+): Promise<IDrugCategory> => {
+  return (await api.put(`/drug-categories/${data.id}`, data)).data;
+};
+
+export const deleteDrugCategory = async (id: IUUID): Promise<number> => {
+  return (await api.delete(`/drug-categories/${id}`)).data;
+};
+
+export const getDrugCategory = async (id: IUUID): Promise<IDrugCategory> => {
+  return (await api.get(`/drug-categories/${id}`)).data;
+};
+
+export const getdrugCategories = async (
+  params?: string,
+): Promise<IPaged<IDrugCategoryResponse>> => {
+  const queryParams = params ? params : "";
+  return (await api.get(`/drug-categories${queryParams}`)).data;
+};
+
+export const getdrugCategoriesNPaged = async (): Promise<IDrugCategory[]> => {
+  return (await api.get(`/drug-categories/all`)).data;
 };
