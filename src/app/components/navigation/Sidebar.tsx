@@ -1,6 +1,7 @@
 import {
   BuildingOffice2Icon,
   ChartBarIcon,
+  CurrencyDollarIcon,
   EyeDropperIcon,
   ShieldCheckIcon,
   UsersIcon,
@@ -48,11 +49,29 @@ const Sidebar = () => {
                 Icon={<BuildingOffice2Icon className='w-5 stroke-2 text-white' />}
               />
             )}
+
+            <SidebarLink
+              text='Transactions'
+              to='/transactions'
+              Icon={<CurrencyDollarIcon className='w-5 stroke-2 text-white' />}
+            />
             {isSudo && (
-              <SidebarLink
+              <SidebarDropdownLink
                 text='Drugs'
                 to='/drugs'
                 Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                links={[
+                  {
+                    label: "Drugs",
+                    to: "/drugs",
+                    permissions: ["VIEW_MEDECINES"],
+                  },
+                  {
+                    label: "Categories",
+                    to: "/drugs/categories",
+                    permissions: ["VIEW_MEDECINES"],
+                  },
+                ]}
               />
             )}
 
@@ -77,6 +96,11 @@ const Sidebar = () => {
                       label: "Add purchase",
                       to: "/drugs/purchases/add",
                       permissions: ["PURCHASE_MEDECINES"],
+                    },
+                    {
+                      label: "Categories",
+                      to: "/drugs/categories",
+                      permissions: ["VIEW_MEDECINES"],
                     },
                   ]}
                 />

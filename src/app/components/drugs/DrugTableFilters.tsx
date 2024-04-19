@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { IDrugFilter } from "../../types/filters";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { drugFilterSchema } from "../../utils/schemas/tableFilters.schemas";
-import { getSellingUnits } from "../../apis/drug";
+import { getdrugCategorys } from "../../apis/drug";
 import { DRUGS_CATEGORIES } from "../../utils/constants/queryKeys";
 
 interface IDrugTableFiltersProps {
@@ -38,8 +38,8 @@ const DrugTableFilters: FC<IDrugTableFiltersProps> = ({
     closeDrawer && closeDrawer();
   };
 
-  const { data: sellingUnits } = useQuery({
-    queryFn: getSellingUnits,
+  const { data: drugCategorys } = useQuery({
+    queryFn: getdrugCategorys,
     queryKey: DRUGS_CATEGORIES,
   });
   const isOnMarket = ["Yes", "No"];
@@ -49,18 +49,18 @@ const DrugTableFilters: FC<IDrugTableFiltersProps> = ({
       <form onSubmit={handleSubmit(handleFilter)}>
         <OptionsField
           required
-          error={errors.sellingUnit?.message}
-          label='User sellingUnit'
-          register={register("sellingUnit")}
-          defaultValue={defaultValues?.sellingUnit}
-          setValue={(value) => setValue("sellingUnit", value)}
+          error={errors.drugCategory?.message}
+          label='User drugCategory'
+          register={register("drugCategory")}
+          defaultValue={defaultValues?.drugCategory}
+          setValue={(value) => setValue("drugCategory", value)}
           options={
-            sellingUnits
+            drugCategorys
               ? [
                   { label: "All", value: "all", selected: true },
-                  ...sellingUnits.map((sellingUnit) => ({
-                    label: sellingUnit,
-                    value: sellingUnit,
+                  ...drugCategorys.map((drugCategory) => ({
+                    label: drugCategory,
+                    value: drugCategory,
                   })),
                 ]
               : []

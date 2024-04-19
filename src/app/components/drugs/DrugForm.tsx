@@ -3,14 +3,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, FC, SetStateAction } from "react";
 import toast from "react-hot-toast";
-import { createDrug, getSellingUnits, updateDrug } from "../../apis/drug";
-import { DRUGS, DRUGS_CATEGORIES } from "../../utils/constants/queryKeys";
+import { createDrug, getdrugCategoriesNPaged, updateDrug } from "../../apis/drug";
+import {
+  DRUGS,
+  DRUGS_CATEGORIES,
+  DRUG_CATEGORIS_NPAGED,
+} from "../../utils/constants/queryKeys";
 import TextField from "../common/form/TextField";
 import Button from "../common/form/Button";
 import { IDrug, IDrugRequest } from "../../types/pharmacy";
 import { drugSchema } from "../../utils/schemas/drug.schema";
-import AutocompleteInput from "../common/form/AutoComplete";
 import TextArea from "../common/form/TextArea";
+import OptionsField from "../common/form/OptionsField";
 
 interface IDrugUpdateForm {
   drug?: IDrug;
@@ -34,18 +38,17 @@ const DrugForm: FC<IDrugUpdateForm> = ({ drug, setIsOpen }) => {
   const createDrugMutation = useMutation(createDrug);
   const updateDrugMutation = useMutation(updateDrug);
 
-  const { data: sellingUnits } = useQuery({
-    queryFn: getSellingUnits,
-    queryKey: DRUGS_CATEGORIES,
+  const { data: drugCategorys } = useQuery({
+    queryFn: getdrugCategoriesNPaged,
+    queryKey: DRUG_CATEGORIS_NPAGED,
   });
-  console.log(errors);
   const onSubmit = (data: IDrugRequest) => {
     if (drug && drug.id) {
       updateDrugMutation.mutate({ id: drug.id, ...data } as IDrug, {
         onSuccess() {
           toast.success("Drug updated successfully");
           setIsOpen(false);
-          queryClient.invalidateQueries(DRUGS);
+          queryClient.invalidateQueries(DRUG_CATEGORIS_NPAGED);
           queryClient.invalidateQueries(DRUGS_CATEGORIES);
           reset();
         },
@@ -56,14 +59,13 @@ const DrugForm: FC<IDrugUpdateForm> = ({ drug, setIsOpen }) => {
           toast.success("Drug created successfully");
           setIsOpen(false);
           queryClient.invalidateQueries(DRUGS);
-          queryClient.invalidateQueries(DRUGS_CATEGORIES);
           reset();
         },
       });
     }
   };
 
-  console.log(sellingUnits);
+  console.log(drugCategorys);
 
   return (
     <>
@@ -77,36 +79,30 @@ const DrugForm: FC<IDrugUpdateForm> = ({ drug, setIsOpen }) => {
               register={register("drug_code")}
             />
           </div>
-          {sellingUnits && (
+          {drugCategorys && (
             <div className='block'>
-              <AutocompleteInput
-                label='Selling unit'
-                error={errors.sellingUnit?.message}
-                register={register("sellingUnit")}
-                suggestions={sellingUnits}
+              <OptionsField
+                label='Type'
+                register={register("drugCategory")}
+                error={errors.drugCategory?.message}
+                required={true}
+                defaultLabel='Select type'
+                options={drugCategorys?.map((category) => ({
+                  value: category.id,
+                  label: category.name,
+                }))}
               />
             </div>
           )}
         </div>
 
-        <div className='grid sm:grid-cols-2 gap-4'>
-          <div className='block'>
-            <TextField
-              label='Price'
-              type='number'
-              error={errors.price?.message}
-              register={register("price")}
-            />
-          </div>
-
-          <div className='block'>
-            <TextField
-              label='Instruction'
-              type='text'
-              error={errors.instruction?.message}
-              register={register("instruction")}
-            />
-          </div>
+        <div className='block'>
+          <TextField
+            label='Instruction'
+            type='text'
+            error={errors.instruction?.message}
+            register={register("instruction")}
+          />
         </div>
 
         <div className='block'>
