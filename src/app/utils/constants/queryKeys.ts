@@ -23,6 +23,7 @@ export const DRUGS_CATEGORIES = ["drugs_categories"];
 export const DRUG_CATEGORY = ["drug_category"];
 export const DRUG_CATEGORIS_NPAGED = ["drugs_categories_npaged"];
 export const PURCHASES = ["purchases"];
+export const DRUG_PURCHASES = ["drug_purchases"];
 export const PURCHASE = ["purchase"];
 export const PURCHASE_DRUGS = ["purchase_drugs"];
 export const TRANSACTIONS = ["transactions"];
