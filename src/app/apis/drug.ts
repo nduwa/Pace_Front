@@ -6,6 +6,7 @@ import {
   IDrugCategory,
   IDrugCategoryRequest,
   IDrugCategoryResponse,
+  IDrugPurchaseResponse,
   IDrugRequest,
   IDrugResponse,
   IInstitutionDrug,
@@ -63,10 +64,17 @@ export const getPurchase = async (id: string): Promise<IPurchaseWithDrugs> => {
   return (await api.get(`/purchases/${id}`)).data;
 };
 
-export const getDrugsPurchase = async (
+export const getDrugsByPruchase = async (
   purchasesId: string,
 ): Promise<IInstitutionDrug[]> => {
   return (await api.get(`/purchases/drugs-purchases/${purchasesId}`)).data;
+};
+
+export const getDrugsPurchaseHistory = async (
+  params?: string,
+): Promise<IPaged<IDrugPurchaseResponse>> => {
+  const queryParams = params ? params : "";
+  return (await api.get(`/purchases/drugs-purchases${queryParams}`)).data;
 };
 
 export const createDrugCategory = async (

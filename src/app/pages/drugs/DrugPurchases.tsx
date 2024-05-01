@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { TrashIcon, EyeIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import Protected from "../../components/auth/Protected";
 import Button from "../../components/common/form/Button";
@@ -10,27 +10,55 @@ import Table from "../../components/table/Table";
 import { IPurchase } from "../../types/pharmacy";
 import { format } from "date-fns";
 import TableActions from "../../components/table/TableActions";
+import { IPaged } from "../../types/common";
+import { useEffect, useState } from "react";
 
 const PurchaseActions = () => {
   return (
     <Protected permissions={["PURCHASE_MEDECINES"]}>
-      <Button to='/drugs/purchases/add' label='Puchase' />
+      <Button to='/drugs/orders/add' label='Add' />
     </Protected>
   );
 };
 
 const DrugPurchases = () => {
-  const { data, isLoading } = useQuery({
+  const [data, setData] = useState<IPaged<IPurchase[]>>();
+  const { data: response, isLoading } = useQuery({
     queryFn: () => getPurchases(),
     queryKey: PURCHASES,
   });
+
+  const drugPurchasesMutation = useMutation(getPurchases);
+
+  const onChangePage = (page: number) => {
+    drugPurchasesMutation.mutate(
+      `?page=${page}}
+      }`,
+      {
+        onSuccess(result) {
+          setData(result);
+        },
+      },
+    );
+  };
+
+  useEffect(() => {
+    if (response) {
+      setData(response);
+    }
+  }, [response]);
+
   return (
     <PageContent
-      title='Purchases'
+      title='Orders'
       isLoading={isLoading}
       actionsComponent={<PurchaseActions />}
     >
       <Table
+        onChangePage={onChangePage}
+        currentPage={data?.currentPage || 1}
+        totalItems={data?.totalItems || 30}
+        itemsPerPage={data?.itemsPerPage || 15}
         columns={[
           {
             title: "Date",
@@ -52,19 +80,12 @@ const DrugPurchases = () => {
             render: (purchase: IPurchase) => (
               <TableActions>
                 <div className='flex flex-col gap-1'>
-                  <div className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'>
-                    <PencilIcon className='w-5 text-blue-500' /> <span>Edit</span>
-                  </div>
                   <Link
-                    to={`/drugs/purchases/${purchase.id}`}
+                    to={`/drugs/orders/${purchase.id}`}
                     className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'
                   >
                     <EyeIcon className='w-5 text-green' /> <span>View</span>
                   </Link>
-                  <div className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'>
-                    <TrashIcon className='w-5 text-red-500' />
-                    <span>Delete</span>
-                  </div>
                 </div>
               </TableActions>
             ),

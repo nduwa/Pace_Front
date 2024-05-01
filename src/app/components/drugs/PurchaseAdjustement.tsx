@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { SyncLoader } from "react-spinners";
-import { adjustDrugs, getDrugsPurchase } from "../../apis/drug";
+import { adjustDrugs, getDrugsByPruchase } from "../../apis/drug";
 import { PURCHASE_DRUGS } from "../../utils/constants/queryKeys";
 import { purchaseDrugsSchema } from "../../utils/schemas/drug.schema";
 import { IAdjustPurchaseDTO, IDrugPurchase } from "../../types/pharmacy";
@@ -21,7 +21,7 @@ const PurchaseAdjustement: FC<IProps> = ({ data, closeDrawer }) => {
     isLoading,
     isFetching,
   } = useQuery({
-    queryFn: () => getDrugsPurchase(data.id),
+    queryFn: () => getDrugsByPruchase(data.id),
     queryKey: PURCHASE_DRUGS,
   });
   const {
@@ -90,6 +90,7 @@ const PurchaseAdjustement: FC<IProps> = ({ data, closeDrawer }) => {
                       <input
                         placeholder='Expiry Date'
                         className='p-2 outline-none'
+                        type='date'
                         defaultValue={
                           format(new Date(drug.expireDate || ""), "yyyy-MM-dd") || ""
                         }

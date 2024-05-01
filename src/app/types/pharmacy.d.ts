@@ -102,11 +102,17 @@ export interface IDrugPurchase {
   expireDate: string | Date | null;
   sellingPrice: number;
   totalPrice: number;
-  drug?: IDrug;
   drugs?: IInstitutionDrug[];
+  drug?: IDrug;
+  purchase?: IPurchase;
+  createdAt: Date;
 }
 
 export interface IPurchaseWithDrugs extends IPurchase {
   drugs: IDrugPurchase[];
   drugsList: IInstitutionDrug[];
+}
+
+export interface IDrugPurchaseResponse {
+  rows: IDrugPurchase[];
 }

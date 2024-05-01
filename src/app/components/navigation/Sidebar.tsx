@@ -88,13 +88,18 @@ const Sidebar = () => {
                       permissions: ["VIEW_MEDECINES"],
                     },
                     {
+                      label: "Orders",
+                      to: "/drugs/orders",
+                      permissions: ["PURCHASE_MEDECINES"],
+                    },
+                    {
                       label: "Purchases",
                       to: "/drugs/purchases",
                       permissions: ["PURCHASE_MEDECINES"],
                     },
                     {
-                      label: "Add purchase",
-                      to: "/drugs/purchases/add",
+                      label: "Add order",
+                      to: "/drugs/orders/add",
                       permissions: ["PURCHASE_MEDECINES"],
                     },
                     {

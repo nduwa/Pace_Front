@@ -19,7 +19,7 @@ const PurchaseDetailsPage = () => {
   return (
     <PageContent
       className='w-full bg-white p-4 rounded-md'
-      title='Adjustment Details'
+      title='Order Details'
       isLoading={isLoading}
     >
       {data && (
