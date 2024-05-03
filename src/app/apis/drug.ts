@@ -36,8 +36,19 @@ export const getDrugs = async (params?: string): Promise<IPaged<IDrugResponse>> 
   return (await api.get(`/drugs${queryParams}`)).data;
 };
 
+export const getInstitutionDrugs = async (
+  params?: string,
+): Promise<IPaged<IDrugResponse>> => {
+  const queryParams = params ? params : "";
+  return (await api.get(`/drugs/institution${queryParams}`)).data;
+};
+
 export const getDrugsNPaged = async (): Promise<IDrug[]> => {
   return (await api.get(`/drugs/all`)).data;
+};
+
+export const getInstitutionDrugsNPaged = async (): Promise<IDrug[]> => {
+  return (await api.get(`/drugs/institution/all`)).data;
 };
 
 export const getdrugCategorys = async (): Promise<string[]> => {

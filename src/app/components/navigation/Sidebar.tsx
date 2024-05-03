@@ -42,6 +42,14 @@ const Sidebar = () => {
               />
             )}
 
+            {HasPermissionGroup("PATIENTS") && (
+              <SidebarLink
+                text='Patients'
+                to='/patients'
+                Icon={<UsersIcon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
             {HasPermissionGroup("INSTITUTIONS", true) && (
               <SidebarLink
                 text='Institutions'
@@ -85,6 +93,11 @@ const Sidebar = () => {
                     {
                       label: "Drugs",
                       to: "/drugs",
+                      permissions: ["VIEW_MEDECINES"],
+                    },
+                    {
+                      label: "In stock",
+                      to: "/stock",
                       permissions: ["VIEW_MEDECINES"],
                     },
                     {
