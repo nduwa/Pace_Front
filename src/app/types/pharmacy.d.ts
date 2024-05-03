@@ -116,3 +116,80 @@ export interface IPurchaseWithDrugs extends IPurchase {
 export interface IDrugPurchaseResponse {
   rows: IDrugPurchase[];
 }
+
+export interface IPatient {
+  id: string;
+  name: string;
+  gender: string;
+  birthDate: string | Date;
+  phone: string;
+  address: {
+    province: string;
+    district: string;
+    sector: string;
+    cell: string;
+    village: string;
+  };
+  patientNO: string;
+  NID: string;
+  NIDIndex: number;
+
+  invoices?: IInvoice[];
+  dependents?: IPatient[];
+}
+
+export interface IPatientRequest
+  extends Omit<IPatient, "id" | "patientNO" | "NIDIndex"> {
+  id?: string;
+}
+
+export interface IPatientsResponse {
+  rows: IPatient[];
+}
+
+export interface IInvoice {
+  id: string;
+  patientId: string | null;
+  institutionId: string;
+  note: string;
+  name: string;
+  phone: string;
+  invoiceNO: string;
+  drugsCount: number;
+  totalCost: number;
+  createdAt: Date;
+  updatedAt: Date;
+
+  patient?: IPatient;
+  institution?: IInstitution;
+  drugs?: IDrug;
+}
+
+export interface IInvoiceDrug {
+  id: string;
+  patientId: string | null;
+  institutionId: string;
+  drugId: string;
+  invoiceId: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IInvoiceResponse {
+  rows: IInvoice[];
+}
+
+export interface IInvoiceDrugCreateDTO {
+  drug: string;
+  qty: number;
+}
+export interface ICreateInvoiceDTO {
+  note: string;
+  name: string;
+  phone: string;
+  patientId: string;
+  drugs: IInvoiceDrugCreateDTO[];
+}

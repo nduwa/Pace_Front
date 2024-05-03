@@ -3,49 +3,40 @@ import { useEffect, useState, SetStateAction, Dispatch, FC } from "react";
 import Protected from "../../components/auth/Protected";
 import Button from "../../components/common/form/Button";
 import { IPaged } from "../../types/common";
-import { getDrugs } from "../../apis/drug";
-import { DRUGS } from "../../utils/constants/queryKeys";
+import { getInstitutionDrugs } from "../../apis/drug";
+import { INSTITUTION_DRUGS } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Modal from "../../components/common/Modal";
 import Table from "../../components/table/Table";
-import TableActions from "../../components/table/TableActions";
 import { IDrug, IDrugResponse } from "../../types/pharmacy";
 import DrugForm from "../../components/drugs/DrugForm";
-import DrugTableActions from "../../components/drugs/DrugTableActions";
 import DrugTableFilters from "../../components/drugs/DrugTableFilters";
-import ImportDrugs from "../../components/drugs/ImportDrugs";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
-  const openCreateDrugModal = () => {
-    setIsOpen(true);
-  };
+const ActionsComponent: FC<IActionComponent> = () => {
   return (
     <>
-      <Protected permissions={["IMPORT_MEDECINES"]}>
-        <ImportDrugs />
-      </Protected>
-      <Protected permissions={["UPDATE_MEDECINES"]}>
-        <Button onClick={openCreateDrugModal} label='Add drug' />
+      <Protected permissions={["PURCHASE_MEDECINES"]}>
+        <Button to='/drugs/orders/add' label='Add' />
       </Protected>
     </>
   );
 };
 
-const DrugsPage = () => {
+const InstitutionDrugsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<IPaged<IDrugResponse>>();
   const [keyword, setKeyword] = useState<string>();
   const [filters, setFilters] = useState<string>();
   const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const { isLoading, data: response } = useQuery({
-    queryFn: () => getDrugs(""),
-    queryKey: DRUGS,
+    queryFn: () => getInstitutionDrugs(""),
+    queryKey: INSTITUTION_DRUGS,
   });
-  const drugsMutation = useMutation(getDrugs);
+  const drugsMutation = useMutation(getInstitutionDrugs);
   const handleSearch = (searchq: string) => {
     setKeyword(searchq);
     drugsMutation.mutate(
@@ -53,8 +44,6 @@ const DrugsPage = () => {
       {
         onSuccess(result) {
           setData(result);
-          console.log(result);
-          console.log(`?searchq=${searchq}&page=1${filters ? `&${filters}` : ``}`);
         },
       },
     );
@@ -110,7 +99,7 @@ const DrugsPage = () => {
       title: "Category",
       key: "drugCategory",
     },
-
+    { title: "Quantity", key: "totalQuantity" },
     {
       title: "Institution",
       key: "",
@@ -119,18 +108,6 @@ const DrugsPage = () => {
           <div>{row.institution ? row.institution.name : "Global"}</div>
         </div>
       ),
-    },
-
-    {
-      title: "Actions",
-      key: "actions",
-      render: (row: IDrug) => {
-        return (
-          <TableActions>
-            <DrugTableActions drug={row} />
-          </TableActions>
-        );
-      },
     },
   ];
   return (
@@ -174,4 +151,4 @@ const DrugsPage = () => {
   );
 };
 
-export default DrugsPage;
+export default InstitutionDrugsPage;
