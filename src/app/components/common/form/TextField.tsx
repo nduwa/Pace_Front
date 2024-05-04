@@ -8,6 +8,7 @@ interface ITextField {
   error?: string;
   value?: string;
   margin?: boolean;
+  allowFloats?: boolean;
   disabled?: boolean;
   onValueChage?: (value: string) => void;
   additionalClass?: string;
@@ -21,6 +22,7 @@ const TextField: FC<ITextField> = ({
   value = "",
   disabled = false,
   margin = true,
+  allowFloats = true,
   onValueChage,
   additionalClass = "",
   ...props
@@ -42,9 +44,10 @@ const TextField: FC<ITextField> = ({
           className={`${additionalClass} block w-full rounded-md border-0 py-2 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-1 focus:ring-inset ${
             error
               ? `focus:ring-red-500 ring-red-300 placeholder:text-red-400`
-              : `focus:ring-darkblue ring-gray-300 placeholder:text-gray-400`
+              : `focus:ring-green ring-gray-300 placeholder:text-gray-400`
           }  sm:text-sm sm:leading-6 outline-none`}
           {...(disabled ? { disabled: true } : {})}
+          {...(allowFloats ? { step: 0.01 } : {})}
         />
         <label className='block text-sm leading-6 text-red-500'>{error}</label>
       </div>

@@ -10,7 +10,6 @@ const DrugPurchaseForm = () => {
     queryKey: DRUGS_NPAGED,
   });
 
-  console.log(data);
   return (
     <PageContent
       title='Purchase Medecines'

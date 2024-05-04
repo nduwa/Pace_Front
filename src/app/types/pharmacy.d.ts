@@ -1,4 +1,4 @@
-import { IInstitution } from "./common";
+import { IInstitution, IUser } from "./common";
 
 export interface IDrugCategory {
   id: string;
@@ -89,6 +89,13 @@ export interface IInstitutionDrug {
   createdAt: Date;
   deletedAt: Date;
   updatedAt: Date;
+
+  totalQuantity?: number;
+  drug?: IDrug;
+}
+
+export interface IInstitutionDrugResponse {
+  rows: IInstitutionDrug[];
 }
 
 export interface IDrugPurchase {
@@ -162,7 +169,8 @@ export interface IInvoice {
 
   patient?: IPatient;
   institution?: IInstitution;
-  drugs?: IDrug;
+  drugs?: IInvoiceDrug[];
+  user?: IUser;
 }
 
 export interface IInvoiceDrug {
@@ -176,9 +184,14 @@ export interface IInvoiceDrug {
   totalPrice: number;
   createdAt: Date;
   updatedAt: Date;
+
+  drug?: IDrug;
 }
 
 export interface IInvoiceResponse {
+  startDate: string;
+  endDate: string;
+  requester: string;
   rows: IInvoice[];
 }
 

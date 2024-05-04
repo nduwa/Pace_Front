@@ -53,8 +53,6 @@ const DrugsPage = () => {
       {
         onSuccess(result) {
           setData(result);
-          console.log(result);
-          console.log(`?searchq=${searchq}&page=1${filters ? `&${filters}` : ``}`);
         },
       },
     );

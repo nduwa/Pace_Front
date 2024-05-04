@@ -30,5 +30,5 @@ export const getPatients = async (
 };
 
 export const getpatients = async (): Promise<IPatient[]> => {
-  return (await api.get(`/patients/all`)).data.data;
+  return (await api.get(`/patients/all`)).data;
 };
