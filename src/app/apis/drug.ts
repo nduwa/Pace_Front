@@ -10,6 +10,7 @@ import {
   IDrugRequest,
   IDrugResponse,
   IInstitutionDrug,
+  IInstitutionDrugResponse,
   IPurchase,
   IPurchaseWithDrugs,
 } from "../types/pharmacy";
@@ -38,7 +39,7 @@ export const getDrugs = async (params?: string): Promise<IPaged<IDrugResponse>> 
 
 export const getInstitutionDrugs = async (
   params?: string,
-): Promise<IPaged<IDrugResponse>> => {
+): Promise<IPaged<IInstitutionDrugResponse>> => {
   const queryParams = params ? params : "";
   return (await api.get(`/drugs/institution${queryParams}`)).data;
 };
@@ -47,7 +48,7 @@ export const getDrugsNPaged = async (): Promise<IDrug[]> => {
   return (await api.get(`/drugs/all`)).data;
 };
 
-export const getInstitutionDrugsNPaged = async (): Promise<IDrug[]> => {
+export const getInstitutionDrugsNPaged = async (): Promise<IInstitutionDrug[]> => {
   return (await api.get(`/drugs/institution/all`)).data;
 };
 

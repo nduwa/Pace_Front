@@ -29,7 +29,7 @@ const Login = () => {
         const { accessToken, ...authState } = response;
         signIn({
           token: accessToken,
-          expiresIn: 60,
+          expiresIn: 120,
           authState: authState,
           tokenType: "Bearer",
         });

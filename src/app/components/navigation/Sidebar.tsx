@@ -14,6 +14,7 @@ import { HasPermissionGroup } from "../../helpers/HasPermissionGroup";
 import SidebarDropdownLink from "./SidebarDropdownLink";
 import Protected from "../auth/Protected";
 import { HasPermission } from "../../helpers/HasPermission";
+import { HasPermissions } from "../../helpers/HasPermissions";
 
 const Sidebar = () => {
   const isSudo = HasPermission(["ALL_PERMISSIONS"], true);
@@ -123,6 +124,26 @@ const Sidebar = () => {
                   ]}
                 />
               </Protected>
+            )}
+
+            {HasPermissions(["SERVE_MEDECINES"]) && (
+              <SidebarDropdownLink
+                text='Sell drugs'
+                to='/invoices'
+                Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                links={[
+                  {
+                    label: "Invoices",
+                    to: "/invoices",
+                    permissions: ["SERVE_MEDECINES"],
+                  },
+                  {
+                    label: "New Invoice",
+                    to: "/invoices/add",
+                    permissions: ["SERVE_MEDECINES"],
+                  },
+                ]}
+              />
             )}
             {HasPermissionGroup("ADMIN") && (
               <SidebarLink

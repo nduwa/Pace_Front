@@ -92,7 +92,6 @@ const PatientForm: FC<IPatientUpdateForm> = ({
     setDistricts(rwandaDitsricts[province as IProvince] as unknown as IDistrict[]);
   };
 
-  console.log(errors);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>
