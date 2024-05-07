@@ -18,6 +18,8 @@ export const INSTITUTIONS = ["institutions"];
 export const INSTITUTIONS_NPAGED = ["institutions_npaged"];
 export const DRUG = ["drug"];
 export const DRUGS = ["drugs"];
+export const INSTITUTION_DRUGS = ["institution_drugs"];
+export const INSTITUTION_DRUGS_NPAGED = ["institution_drugs_npaged"];
 export const DRUGS_NPAGED = ["drugs_npaged"];
 export const DRUGS_CATEGORIES = ["drugs_categories"];
 export const DRUG_CATEGORY = ["drug_category"];
@@ -28,3 +30,6 @@ export const PURCHASE = ["purchase"];
 export const PURCHASE_DRUGS = ["purchase_drugs"];
 export const TRANSACTIONS = ["transactions"];
 export const TRANSACTION = ["transaction"];
+
+export const PATIENTS = ["patients"];
+export const PATIENTS_NPAGED = ["patients_npaged"];
