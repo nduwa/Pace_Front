@@ -88,7 +88,7 @@ const DrugForm: FC<IDrugUpdateForm> = ({ drug, setIsOpen }) => {
                 required={true}
                 defaultLabel='Select type'
                 options={drugCategorys?.map((category) => ({
-                  value: category.id,
+                  value: category.name,
                   label: category.name,
                 }))}
               />

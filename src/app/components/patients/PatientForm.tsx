@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { PATIENTS } from "../../utils/constants/queryKeys";
 import TextField from "../common/form/TextField";
@@ -10,12 +10,7 @@ import Button from "../common/form/Button";
 import { IPatient, IPatientRequest } from "../../types/pharmacy";
 import { patientSchema } from "../../utils/schemas/patient.shema";
 import { addDependent, createPatient, updatePatient } from "../../apis/patients";
-import {
-  IDistrict,
-  IProvince,
-  rwandaDitsricts,
-  rwandaProvinces,
-} from "../../constants/addresses";
+import { rwandaProvinces } from "../../constants/addresses";
 import RadioButton from "../common/form/RadioButton";
 
 interface IPatientUpdateForm {
@@ -82,14 +77,8 @@ const PatientForm: FC<IPatientUpdateForm> = ({
     }
   };
 
-  const [districts, setDistricts] = useState<Partial<IDistrict>[]>(
-    rwandaDitsricts[
-      (patient?.address.province || "City Of Kigali") as unknown as IProvince
-    ] as unknown as IDistrict[],
-  );
   const provinceChange = (province: string) => {
     setValue("address.province", province);
-    setDistricts(rwandaDitsricts[province as IProvince] as unknown as IDistrict[]);
   };
 
   return (
@@ -149,16 +138,11 @@ const PatientForm: FC<IPatientUpdateForm> = ({
             />
           </div>
           <div className='block'>
-            <OptionsField
+            <TextField
               label='District'
-              register={register("address.district")}
+              type='text'
               error={errors.address?.district?.message}
-              required={true}
-              defaultLabel='Select type'
-              options={districts.map((district) => ({
-                value: district,
-                label: district,
-              }))}
+              register={register("address.district")}
             />
           </div>
           <TextField

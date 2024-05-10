@@ -1,14 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import PageContent from "../../components/common/PageContent";
 import { getPurchase } from "../../apis/drug";
 import { PURCHASE } from "../../utils/constants/queryKeys";
 import { format } from "date-fns";
 import Table from "../../components/table/Table";
 import { IDrugPurchase } from "../../types/pharmacy";
-import PurchaseDrawer from "./PurchaseDrawer";
-import PurchaseAdjustement from "../../components/drugs/PurchaseAdjustement";
 
 const PurchaseDetailsPage = () => {
   const { id } = useParams();
@@ -27,11 +24,9 @@ const PurchaseDetailsPage = () => {
           <div className='flex items-center justify-between'>
             <div>
               {" "}
-              <p>Date:{format(new Date(data.date), "dd-MM-yyyy")}</p>
+              <p className='font-md text-lg text-gray-900'>#:{data.purchaseNO}</p>
+              <p>Date:{format(new Date(data.date || ""), "dd-MM-yyyy")}</p>
               <p>Supllier:{data.supplier}</p>
-            </div>
-            <div>
-              <DocumentArrowDownIcon className='w-8 text-green' />
             </div>
           </div>
           <div className='mt-4'>
@@ -67,15 +62,6 @@ const PurchaseDetailsPage = () => {
                   title: "Selling Price",
                   key: "drug",
                   render: (drug: IDrugPurchase) => <span>{drug.sellingPrice}</span>,
-                },
-                {
-                  title: "",
-                  key: "",
-                  render: (drug: IDrugPurchase) => (
-                    <PurchaseDrawer>
-                      <PurchaseAdjustement data={drug} />
-                    </PurchaseDrawer>
-                  ),
                 },
               ]}
             />

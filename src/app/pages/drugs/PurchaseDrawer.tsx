@@ -9,16 +9,18 @@ const PurchaseDrawer: FC<PropsWithChildren> = ({ children }) => {
   };
   return (
     <>
-      <Square3Stack3DIcon
-        onClick={() => setOpen(true)}
-        className='h-5 text-darkblue'
-      />
-      <Drawer
-        open={open}
-        onClose={() => setOpen(false)}
-        DrawerContent={children}
-        closeDrawer={closeDrawer}
-      />
+      <div className='flex p-2'>
+        <Square3Stack3DIcon
+          onClick={() => setOpen(true)}
+          className='h-5 text-darkblue '
+        />
+        <Drawer
+          open={open}
+          onClose={() => setOpen(false)}
+          DrawerContent={children}
+          closeDrawer={closeDrawer}
+        />
+      </div>
     </>
   );
 };

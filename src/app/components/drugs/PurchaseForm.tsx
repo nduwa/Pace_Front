@@ -11,6 +11,7 @@ import { createpurchase } from "../../apis/drug";
 import TextField from "../common/form/TextField";
 import Button from "../common/form/Button";
 import ComboboxField from "../common/form/ComboboxField";
+import { useNavigate } from "react-router-dom";
 
 interface IPurchaseFormProps {
   drugs: IDrug[];
@@ -27,6 +28,8 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
     resolver: zodResolver(createPurchaseSchema),
   });
 
+  const navigate = useNavigate();
+
   const createPurchaseMutation = useMutation(createpurchase);
 
   const { append, fields, remove } = useFieldArray({
@@ -40,11 +43,10 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
         toast.success("Purchase Created");
         fields.forEach((_, index) => remove(index));
         reset();
+        navigate("/drugs/orders");
       },
     });
   };
-
-  console.log(errors);
 
   return (
     <div className='w-full'>

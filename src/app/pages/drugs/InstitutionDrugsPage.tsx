@@ -104,7 +104,7 @@ const InstitutionDrugsPage = () => {
         </div>
       ),
     },
-    { title: "Quantity", key: "totalQuantity" },
+    { title: "Quantity", key: "quantity" },
   ];
   return (
     <PageContent

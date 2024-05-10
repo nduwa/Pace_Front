@@ -4,8 +4,6 @@ import { DRUG_PURCHASES } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
 import { IDrugPurchase, IDrugPurchaseResponse } from "../../types/pharmacy";
-import PurchaseDrawer from "./PurchaseDrawer";
-import PurchaseAdjustement from "../../components/drugs/PurchaseAdjustement";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { IPaged } from "../../types/common";
@@ -47,6 +45,13 @@ const PurchaseHistory = () => {
           itemsPerPage={data?.itemsPerPage || 15}
           columns={[
             {
+              title: "PurchaseNO",
+              key: "date",
+              render: (drug: IDrugPurchase) => (
+                <span>{drug.purchase?.purchaseNO}</span>
+              ),
+            },
+            {
               title: "Date",
               key: "date",
               render: (drug: IDrugPurchase) => (
@@ -81,15 +86,6 @@ const PurchaseHistory = () => {
               title: "Selling Price",
               key: "drug",
               render: (drug: IDrugPurchase) => <span>{drug.sellingPrice}</span>,
-            },
-            {
-              title: "",
-              key: "",
-              render: (drug: IDrugPurchase) => (
-                <PurchaseDrawer>
-                  <PurchaseAdjustement data={drug} />
-                </PurchaseDrawer>
-              ),
             },
           ]}
         />
