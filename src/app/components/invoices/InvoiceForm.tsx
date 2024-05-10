@@ -15,11 +15,14 @@ import { createInvoice } from "../../apis/invoice";
 import { getpatients } from "../../apis/patients";
 import { PATIENTS_NPAGED } from "../../utils/constants/queryKeys";
 import InvoiceDetailsComponent from "./InvoiceDetailsComponent";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 type costObject = {
   unitPrice: number;
   quantity: number;
   total: number;
+  expireDate: string;
 };
 
 interface IInvoiceFormProps {
@@ -37,6 +40,8 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
   } = useForm<Partial<ICreateInvoiceDTO>>({
     resolver: zodResolver(createInvoiceSchema),
   });
+
+  const navigate = useNavigate();
 
   const openPrintableInvoice = (invoice: IInvoice) => {
     const newWindow = window.open("", "_blank") as Window;
@@ -78,6 +83,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
         openPrintableInvoice(invoice);
         fields.forEach((_, index) => remove(index));
         reset();
+        navigate("/invoices");
       },
     });
   };
@@ -101,6 +107,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
         unitPrice,
         total: isNaN(cost) ? 0 : cost,
         quantity: drug.qty,
+        expireDate: format(new Date(selectedDrug?.expireDate || ""), "dd-MM-yyyy"),
       });
     }
 
@@ -148,6 +155,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
                 <tr>
                   <th colSpan={3}>Drug Batch Number</th>
                   <th>Quantity</th>
+                  <th>Expire</th>
                   <th>SubTotal</th>
                   <th>_</th>
                 </tr>
@@ -164,7 +172,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
                           <ComboboxField
                             options={drugs.map((drug) => ({
                               value: drug.id,
-                              label: `${drug.batchNumber} ~~ ${drug.drug?.designation} ~~ ${drug.totalQuantity}`,
+                              label: `${drug.batchNumber} ${drug.drug?.designation} : ${drug.quantity}`,
                             }))}
                             error={
                               errors.drugs
@@ -195,8 +203,8 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
                         }}
                       />
                     </td>
+                    <td>{drugsCost[index]?.expireDate}</td>
                     <td>{drugsCost[index]?.total} RWF</td>
-
                     <td className='px-2'>
                       <TrashIcon
                         onClick={() => remove(index)}

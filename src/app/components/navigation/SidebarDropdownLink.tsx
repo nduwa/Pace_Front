@@ -48,7 +48,7 @@ const SidebarDropdownLink = (props: PropsWithChildren<SidebarLinkProps>) => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <Menu.Items className='w-full pl-9 mt-1'>
+          <Menu.Items className='w-full pl-9 mt-1' data-open={true}>
             {props.links.map((link, index) => (
               <Protected key={index} permissions={link.permissions ?? []}>
                 <Menu.Item>

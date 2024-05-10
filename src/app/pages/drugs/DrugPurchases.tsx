@@ -9,9 +9,10 @@ import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
 import { IPurchase } from "../../types/pharmacy";
 import { format } from "date-fns";
-import TableActions from "../../components/table/TableActions";
 import { IPaged } from "../../types/common";
 import { useEffect, useState } from "react";
+import PurchaseDrawer from "./PurchaseDrawer";
+import PurchaseAdjustement from "../../components/drugs/PurchaseAdjustement";
 
 const PurchaseActions = () => {
   return (
@@ -60,6 +61,7 @@ const DrugPurchases = () => {
         totalItems={data?.totalItems || 30}
         itemsPerPage={data?.itemsPerPage || 15}
         columns={[
+          { title: "#", key: "purchaseNO" },
           {
             title: "Date",
             key: "date",
@@ -78,16 +80,18 @@ const DrugPurchases = () => {
             title: "Actions",
             key: "",
             render: (purchase: IPurchase) => (
-              <TableActions>
-                <div className='flex flex-col gap-1'>
-                  <Link
-                    to={`/drugs/orders/${purchase.id}`}
-                    className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'
-                  >
-                    <EyeIcon className='w-5 text-green' /> <span>View</span>
-                  </Link>
-                </div>
-              </TableActions>
+              <div className='flex gap-2'>
+                <Link
+                  to={`/drugs/orders/${purchase.id}`}
+                  className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'
+                >
+                  <EyeIcon className='w-5 text-green' /> <span>View</span>
+                </Link>
+
+                <PurchaseDrawer>
+                  <PurchaseAdjustement data={purchase} />
+                </PurchaseDrawer>
+              </div>
             ),
           },
         ]}
