@@ -51,7 +51,7 @@ const ComboboxField: FC<IOptionsField> = ({
         valueChanged(defaultOption);
       }
     }
-  }, [defaultValue, options]);
+  }, []);
 
   return (
     <div className='block w-full'>

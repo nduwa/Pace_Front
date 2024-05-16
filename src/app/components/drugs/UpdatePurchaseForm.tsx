@@ -6,31 +6,50 @@ import toast from "react-hot-toast";
 import { FC } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createPurchaseSchema } from "../../utils/schemas/drug.schema";
-import { ICreatePurchaseDTO, IDrug } from "../../types/pharmacy";
-import { createpurchase } from "../../apis/drug";
+import { ICreatePurchaseDTO, IDrug, IPurchase } from "../../types/pharmacy";
+import { updatepurchase } from "../../apis/drug";
 import TextField from "../common/form/TextField";
 import Button from "../common/form/Button";
-import ComboboxField from "../common/form/ComboboxField";
 import { useNavigate } from "react-router-dom";
+import OptionsField from "../common/form/OptionsField";
+import { format } from "date-fns";
 
-interface IPurchaseFormProps {
+interface IUpdatePurchaseFormProps {
+  purchase: IPurchase;
   drugs: IDrug[];
 }
-const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
+
+const UpdatePurchaseForm: FC<IUpdatePurchaseFormProps> = ({ drugs, purchase }) => {
+  console.log(purchase);
   const {
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { errors },
     reset,
   } = useForm<Partial<ICreatePurchaseDTO>>({
     resolver: zodResolver(createPurchaseSchema),
+    defaultValues: {
+      id: purchase.id,
+      note: purchase?.note,
+      date: format(new Date(purchase?.date ?? ""), "yyyy-MM-dd"),
+      supplier: purchase?.supplier,
+      drugs: purchase?.drugs?.map((drug) => {
+        return {
+          drug: drug.drugId.toString(),
+          qty: drug.quantity.toString(),
+          unitPrice: drug.unitPrice.toString(),
+          sellingPrice: drug.sellingPrice.toString(),
+          expireDate: format(new Date(drug?.expireDate ?? ""), "yyyy-MM-dd"),
+          batchNumber: drug.batchNumber || "",
+        };
+      }),
+    },
   });
 
   const navigate = useNavigate();
 
-  const createPurchaseMutation = useMutation(createpurchase);
+  const updatePurchaseMutation = useMutation(updatepurchase);
 
   const { append, fields, remove } = useFieldArray({
     control,
@@ -38,14 +57,18 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
   });
 
   const onSubmit = (data: Partial<ICreatePurchaseDTO>) => {
-    createPurchaseMutation.mutate(data as ICreatePurchaseDTO, {
-      onSuccess: () => {
-        toast.success("Purchase Created");
-        fields.forEach((_, index) => remove(index));
-        reset();
-        navigate("/drugs/orders");
+    console.log(data);
+    updatePurchaseMutation.mutate(
+      { ...data, id: purchase.id } as unknown as ICreatePurchaseDTO,
+      {
+        onSuccess: () => {
+          toast.success("Purchase Created");
+          fields.forEach((_, index) => remove(index));
+          reset();
+          navigate("/drugs/orders");
+        },
       },
-    });
+    );
   };
 
   return (
@@ -92,18 +115,16 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
                     <td colSpan={3} className='p-4'>
                       <div className='flex flex-col space-y-4'>
                         <div className='w-full'>
-                          <ComboboxField
+                          <OptionsField
                             options={drugs.map((drug) => ({
                               value: drug.id,
                               label: `${drug.drug_code} ${drug.designation}`,
                             }))}
+                            register={register(`drugs.${index}.drug`)}
                             error={
                               errors.drugs
                                 ? errors.drugs[index]?.drug?.message
                                 : undefined
-                            }
-                            onChange={(value: string) =>
-                              setValue(`drugs.${index}.drug`, value)
                             }
                           />
                         </div>
@@ -198,7 +219,7 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
                     <td colSpan={4}>
                       <Button
                         label='Save'
-                        isLoading={createPurchaseMutation.isLoading}
+                        isLoading={updatePurchaseMutation.isLoading}
                         className='mt-4'
                       />
                     </td>
@@ -213,4 +234,4 @@ const PurchaseForm: FC<IPurchaseFormProps> = ({ drugs }) => {
   );
 };
 
-export default PurchaseForm;
+export default UpdatePurchaseForm;

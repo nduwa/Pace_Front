@@ -42,13 +42,14 @@ export interface IDrugResponse {
 
 export interface IPurchaseDrugDTO {
   drug: string;
-  qty: number;
-  unitPrice: number;
-  sellingPrice: number;
-  batchNumber: string;
+  qty: number | string;
+  unitPrice: number | string;
+  sellingPrice: number | string;
+  batchNumber: string | string;
   expireDate: Date | string;
 }
 export interface ICreatePurchaseDTO {
+  id?: string;
   note: string;
   date: string;
   supplier: string;
@@ -62,6 +63,7 @@ export interface IPurchase {
   totalCost: number;
   supplier?: string;
   drugsCount: number;
+  approved: boolean;
   createdAt: Date;
   updatedAt: Date;
 
@@ -98,6 +100,8 @@ export interface IInstitutionDrug {
 }
 
 export interface IInstitutionDrugResponse {
+  listType: string;
+  drug: string;
   rows: IInstitutionDrug[];
 }
 
@@ -166,6 +170,7 @@ export interface IInvoice {
   phone: string;
   invoiceNO: string;
   drugsCount: number;
+  type: string;
   totalCost: number;
   createdAt: Date;
   updatedAt: Date;
