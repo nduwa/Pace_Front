@@ -52,6 +52,10 @@ export const getInstitutionDrugsNPaged = async (): Promise<IInstitutionDrug[]> =
   return (await api.get(`/drugs/institution/all`)).data;
 };
 
+export const getInstitutionGroupedNPaged = async (): Promise<IInstitutionDrug[]> => {
+  return (await api.get(`/drugs/institution/grouped`)).data;
+};
+
 export const getdrugCategorys = async (): Promise<string[]> => {
   return (await api.get(`/drugs/categories`)).data;
 };
@@ -74,6 +78,20 @@ export const getPurchases = async (
 
 export const getPurchase = async (id: string): Promise<IPurchaseWithDrugs> => {
   return (await api.get(`/purchases/${id}`)).data;
+};
+
+export const deletePurchase = async (id: string): Promise<number> => {
+  return (await api.delete(`/purchases/${id}`)).data;
+};
+
+export const approvePurchase = async (id: string): Promise<IPurchaseWithDrugs> => {
+  return (await api.get(`/purchases/${id}/approve`)).data;
+};
+
+export const updatepurchase = async (
+  data: ICreatePurchaseDTO,
+): Promise<IPurchase> => {
+  return (await api.put(`/purchases/${data.id}`, data)).data;
 };
 
 export const getDrugsByPruchase = async (

@@ -5,6 +5,7 @@ import DrugsPage from "../pages/drugs/DrugsPage";
 import InstitutionDrugsPage from "../pages/drugs/InstitutionDrugsPage";
 import PurchaseDetailsPage from "../pages/drugs/PurchaseDetails";
 import PurchaseHistory from "../pages/drugs/PurchaseHistory";
+import UpdatePurchasePage from "../pages/drugs/UpdatePurchasePage";
 import TransactionsPage from "../pages/transactions/TransactionsPage";
 import { IRoute } from "../types/common";
 
@@ -46,6 +47,12 @@ const drugsRoutes: IRoute[] = [
   {
     path: "/drugs/orders/:id",
     element: PurchaseDetailsPage,
+    allowedPermissionGroup: "MEDECINES",
+  },
+
+  {
+    path: "/drugs/orders/:id/update",
+    element: UpdatePurchasePage,
     allowedPermissionGroup: "MEDECINES",
   },
 ];

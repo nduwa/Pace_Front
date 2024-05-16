@@ -1,26 +1,15 @@
 import { z } from "zod";
 
 export const drugSchema = z.object({
-  drug_code: z.string().min(1, "Drug code is required"),
+  drug_code: z.string().max(255, "Too long").min(1, "Drug code is required"),
   description: z.string().min(1, "Description is required"),
-  designation: z.string().min(1, "Designation is required"),
-  instruction: z.string(),
-  drugCategory: z.string().min(1, "Selling unit is required"),
+  designation: z.string().max(255, "Too long").min(1, "Designation is required"),
+  instruction: z.string().max(255, "Too long"),
+  drugCategory: z.string().max(255, "Too long").min(1, "Selling unit is required"),
 });
 
-// const isUniqueDrugStock = (drugs: Array<{ drug: string }>) => {
-//   const drugSet = new Set<string>();
-//   for (const { drug } of drugs) {
-//     if (drugSet.has(drug)) {
-//       return false;
-//     }
-//     drugSet.add(drug);
-//   }
-//   return true;
-// };
-
 export const createPurchaseSchema = z.object({
-  note: z.string().optional(),
+  note: z.string().max(255, "Too long").optional(),
   date: z.string().min(10, "Valid date is required"),
   supplier: z.string().optional(),
   drugs: z
@@ -47,7 +36,7 @@ export const createPurchaseSchema = z.object({
             const num = parseInt(value);
             return num;
           }),
-        batchNumber: z.string().optional(),
+        batchNumber: z.string().max(255, "Too long").optional(),
         expireDate: z.string(),
       }),
     )

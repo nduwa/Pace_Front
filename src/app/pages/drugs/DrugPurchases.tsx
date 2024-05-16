@@ -13,6 +13,7 @@ import { IPaged } from "../../types/common";
 import { useEffect, useState } from "react";
 import PurchaseDrawer from "./PurchaseDrawer";
 import PurchaseAdjustement from "../../components/drugs/PurchaseAdjustement";
+import Status from "../../components/common/Status";
 
 const PurchaseActions = () => {
   return (
@@ -76,6 +77,13 @@ const DrugPurchases = () => {
             render: (purchase: IPurchase) => <p>{purchase.totalCost} Rwf</p>,
           },
           { title: "Supplier", key: "supplier" },
+          {
+            title: "Approved",
+            key: "date",
+            render: (purchase: IPurchase) => (
+              <Status falseText='Not yet' status={purchase.approved} />
+            ),
+          },
           {
             title: "Actions",
             key: "",
