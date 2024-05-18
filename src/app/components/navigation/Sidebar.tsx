@@ -3,6 +3,7 @@ import {
   ChartBarIcon,
   CurrencyDollarIcon,
   EyeDropperIcon,
+  FolderOpenIcon,
   ShieldCheckIcon,
   UsersIcon,
   XCircleIcon,
@@ -15,9 +16,12 @@ import SidebarDropdownLink from "./SidebarDropdownLink";
 import Protected from "../auth/Protected";
 import { HasPermission } from "../../helpers/HasPermission";
 import { HasPermissions } from "../../helpers/HasPermissions";
+import { useContext } from "react";
+import { AuthContext } from "../../context/Auth";
 
 const Sidebar = () => {
   const isSudo = HasPermission(["ALL_PERMISSIONS"], true);
+  const user = useContext(AuthContext)?.userProfile;
   return (
     <div className='min-h-screen'>
       <div className='sidebar w-60 flex overflow-x-clip flex-col h-full justify-between border shadow duration-300 z-10 sidebar fixed top-0 bottom-0 left-[-300px] md:left-0 bg-darkblue'>
@@ -85,45 +89,56 @@ const Sidebar = () => {
             )}
 
             {!isSudo && (
-              <Protected permissions={["VIEW_MEDECINES", "PURCHASE_MEDECINES"]}>
-                <SidebarDropdownLink
-                  text='Drugs'
-                  to='/drugs'
-                  Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
-                  links={[
-                    {
-                      label: "Drugs",
-                      to: "/drugs",
-                      permissions: ["VIEW_MEDECINES"],
-                    },
-                    {
-                      label: "In stock",
-                      to: "/stock",
-                      permissions: ["VIEW_MEDECINES"],
-                    },
-                    {
-                      label: "Orders",
-                      to: "/drugs/orders",
-                      permissions: ["PURCHASE_MEDECINES"],
-                    },
-                    {
-                      label: "Purchases",
-                      to: "/drugs/purchases",
-                      permissions: ["PURCHASE_MEDECINES"],
-                    },
-                    {
-                      label: "Add order",
-                      to: "/drugs/orders/add",
-                      permissions: ["PURCHASE_MEDECINES"],
-                    },
-                    {
-                      label: "Categories",
-                      to: "/drugs/categories",
-                      permissions: ["VIEW_MEDECINES"],
-                    },
-                  ]}
-                />
-              </Protected>
+              <>
+                <Protected permissions={["INSTITUTION_ADMIN"]}>
+                  {user && user.institution.institutionId == null && (
+                    <SidebarLink
+                      text='Branches'
+                      to='/branches'
+                      Icon={<FolderOpenIcon className='w-5 stroke-2 text-white' />}
+                    />
+                  )}
+                </Protected>
+                <Protected permissions={["VIEW_MEDECINES", "PURCHASE_MEDECINES"]}>
+                  <SidebarDropdownLink
+                    text='Drugs'
+                    to='/drugs'
+                    Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                    links={[
+                      {
+                        label: "Drugs",
+                        to: "/drugs",
+                        permissions: ["VIEW_MEDECINES"],
+                      },
+                      {
+                        label: "In stock",
+                        to: "/stock",
+                        permissions: ["VIEW_MEDECINES"],
+                      },
+                      {
+                        label: "Orders",
+                        to: "/drugs/orders",
+                        permissions: ["PURCHASE_MEDECINES"],
+                      },
+                      {
+                        label: "Purchases",
+                        to: "/drugs/purchases",
+                        permissions: ["PURCHASE_MEDECINES"],
+                      },
+                      {
+                        label: "Add order",
+                        to: "/drugs/orders/add",
+                        permissions: ["PURCHASE_MEDECINES"],
+                      },
+                      {
+                        label: "Categories",
+                        to: "/drugs/categories",
+                        permissions: ["VIEW_MEDECINES"],
+                      },
+                    ]}
+                  />
+                </Protected>
+              </>
             )}
 
             {HasPermissions(["SERVE_MEDECINES"]) && (

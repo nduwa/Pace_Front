@@ -1,4 +1,5 @@
 import {
+  ICreateBranch,
   IInstitution,
   IInstitutionRequest,
   IInstitutionResponse,
@@ -11,6 +12,10 @@ export const createInstitution = async (
   data: IInstitutionRequest,
 ): Promise<IInstitution> => {
   return (await api.post("/institutions", data)).data;
+};
+
+export const createBranch = async (data: ICreateBranch): Promise<IInstitution> => {
+  return (await api.post("/institutions/branches", data)).data;
 };
 
 export const updateInstitution = async (

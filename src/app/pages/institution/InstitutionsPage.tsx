@@ -128,6 +128,11 @@ const InstitutionsPage = () => {
               ),
             },
             {
+              title: "Branches",
+              key: "",
+              render: (row: IInstitution) => <span>{row.branches?.length}</span>,
+            },
+            {
               title: "Actions",
               key: "actions",
               render: (row: IInstitution) => {

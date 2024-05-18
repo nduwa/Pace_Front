@@ -74,6 +74,10 @@ export interface IInstitution {
     location: string;
     TIN: string;
   };
+  institutionId: string | null;
+
+  parentInstitution?: IInstitution;
+  branches?: IInstitution[];
 
   createdAt: Date;
 }
@@ -82,6 +86,14 @@ export interface IInstitutionRequest
   extends Omit<IInstitution, "id" | "createdAt" | "institutionType"> {
   id?: string;
   institutionType?: string | null;
+}
+export interface ICreateBranch {
+  name: string;
+  location: string;
+  details: {
+    location: string;
+    TIN: string;
+  };
 }
 
 export interface IInstitutionDTO extends IInstitution {

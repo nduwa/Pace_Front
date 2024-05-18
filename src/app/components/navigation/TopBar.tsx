@@ -13,8 +13,15 @@ const TopBar = () => {
           <button type='button' onClick={() => ToggleSidebar()}>
             <Bars3BottomLeftIcon className='w-7 text-darkblue md:hidden' />{" "}
           </button>
-          <div className='ml-4'>
-            {user?.institution ? user.institution.name : "ADMIN"}
+          <div className='ml-4 flex flex-col'>
+            <div className='font-bold text-md'>
+              {user?.institution ? user.institution.name : "ADMIN"}
+            </div>
+            {user?.institution.parentInstitution && (
+              <div className='font-light text-xs'>
+                {user.institution.parentInstitution.name}
+              </div>
+            )}
           </div>
         </div>
 
