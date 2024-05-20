@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { IDrugFilter } from "../../types/filters";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { drugFilterSchema } from "../../utils/schemas/tableFilters.schemas";
-import { getdrugCategorys } from "../../apis/drug";
 import { DRUGS_CATEGORIES } from "../../utils/constants/queryKeys";
+import { getdrugCategoriesNPaged } from "../../apis/drug";
 
 interface IDrugTableFiltersProps {
   filterFunc: (filters: string) => void;
@@ -39,7 +39,7 @@ const DrugTableFilters: FC<IDrugTableFiltersProps> = ({
   };
 
   const { data: drugCategorys } = useQuery({
-    queryFn: getdrugCategorys,
+    queryFn: getdrugCategoriesNPaged,
     queryKey: DRUGS_CATEGORIES,
   });
   const isOnMarket = ["Yes", "No"];
@@ -59,8 +59,8 @@ const DrugTableFilters: FC<IDrugTableFiltersProps> = ({
               ? [
                   { label: "All", value: "all", selected: true },
                   ...drugCategorys.map((drugCategory) => ({
-                    label: drugCategory,
-                    value: drugCategory,
+                    label: drugCategory.name,
+                    value: drugCategory.name,
                   })),
                 ]
               : []

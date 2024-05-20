@@ -1,68 +1,86 @@
 import ReactDOM from "react-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { DocumentArrowDownIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
-import Protected from "../../components/auth/Protected";
-import Button from "../../components/common/form/Button";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { PURCHASES } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
-import { IInvoice, IInvoiceResponse } from "../../types/pharmacy";
+import { IInvoice, IPatientInvoiceResponse } from "../../types/pharmacy";
 import { format } from "date-fns";
 import { IPaged } from "../../types/common";
 import { useEffect, useState } from "react";
-import { getInvoices } from "../../apis/invoice";
 import InvoiceDetailsComponent from "../../components/invoices/InvoiceDetailsComponent";
 import InvoiceDrawer from "../../components/invoices/InvoiceDrawer";
 import InvoiceDetails from "../../components/invoices/InvoiceDetails";
-import InvoiceTableFilters from "../../components/invoices/InvoiceTableFilters";
+import { getPatient, getPatientInvoices } from "../../apis/patients";
+import PatientInvoiceTableFilters from "../../components/patients/PatientInvoiceTableFilters";
 
-const InvoiceActions = () => {
-  return (
-    <Protected permissions={["SERVE_MEDECINES"]}>
-      <Button to='/invoices/add' label='Add' />
-    </Protected>
-  );
-};
+const PatientInvoices = () => {
+  const patientId = useParams().id as string;
 
-const DrugInvoices = () => {
-  const [data, setData] = useState<IPaged<IInvoiceResponse>>();
+  const navigate = useNavigate();
+  if (!patientId) {
+    navigate("/patients");
+    return <></>;
+  }
+
+  const [data, setData] = useState<IPaged<IPatientInvoiceResponse>>();
   const [filters, setFilters] = useState<string>();
   const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const { data: response, isLoading } = useQuery({
-    queryFn: () => getInvoices(),
+    queryFn: () => getPatientInvoices({ id: patientId }),
     queryKey: PURCHASES,
   });
 
-  const drugInvoicesMutation = useMutation(getInvoices);
+  const { data: patient, isLoading: patientLoading } = useQuery({
+    queryFn: () => getPatient(patientId),
+    queryKey: ["patient"],
+  });
+
+  const drugInvoicesMutation = useMutation(getPatientInvoices);
 
   const onChangePage = (page: number) => {
-    drugInvoicesMutation.mutate(`?page=${page}${filters ? `&${filters}` : ``}`, {
-      onSuccess(result) {
-        setData(result);
+    drugInvoicesMutation.mutate(
+      {
+        id: patientId,
+        params: `?patientId=${patientId}&page=${page}${
+          filters ? `&${filters}` : ``
+        }`,
       },
-    });
+      {
+        onSuccess(result) {
+          setData(result);
+        },
+      },
+    );
   };
 
   const handleFilter = (appliedFilters: string) => {
     setFilters(appliedFilters);
     setFiltersLoading(true);
-    drugInvoicesMutation.mutate(`?${appliedFilters}`, {
-      onSuccess(result) {
-        setFiltersLoading(false);
-        setData(result);
+    drugInvoicesMutation.mutate(
+      {
+        id: patientId,
+        params: `?${appliedFilters}`,
       },
-      onError() {
-        setFiltersLoading(false);
+      {
+        onSuccess(result) {
+          setFiltersLoading(false);
+          setData(result);
+        },
+        onError() {
+          setFiltersLoading(false);
+        },
       },
-    });
+    );
   };
 
   const defaultFilters = data?.data
     ? {
-        requester: data.data.requester,
+        type: data.data.type,
         startDate: data.data.startDate,
         endDate: data.data.endDate,
+        institution: data.data.institution,
       }
     : undefined;
 
@@ -90,11 +108,20 @@ const DrugInvoices = () => {
   };
 
   return (
-    <PageContent
-      title='Invoices'
-      isLoading={isLoading}
-      actionsComponent={<InvoiceActions />}
-    >
+    <PageContent title={`Patient Invoices`} isLoading={isLoading || patientLoading}>
+      <div className='bg-white p-6'>
+        <h1 className='font-bold text-md'>
+          {patient?.patientNO} {patient?.name}
+        </h1>
+        <div className='flex'>
+          <div className='w-24 opacity-70'>NID</div>
+          <div>{patient?.NID}</div>
+        </div>
+        <div className='flex'>
+          <div className='w-24 opacity-70'>Phone</div>
+          <div>{patient?.phone}</div>
+        </div>
+      </div>
       <Table
         hideFilters={!filtersLoading}
         onChangePage={onChangePage}
@@ -102,7 +129,7 @@ const DrugInvoices = () => {
         totalItems={data?.totalItems || 30}
         itemsPerPage={data?.itemsPerPage || 15}
         filtersComponent={
-          <InvoiceTableFilters
+          <PatientInvoiceTableFilters
             isLoading={filtersLoading}
             defaultValues={defaultFilters}
             filterFunc={handleFilter}
@@ -164,4 +191,4 @@ const DrugInvoices = () => {
   );
 };
 
-export default DrugInvoices;
+export default PatientInvoices;

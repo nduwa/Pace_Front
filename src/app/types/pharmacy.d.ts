@@ -214,3 +214,11 @@ export interface ICreateInvoiceDTO {
   patientId: string;
   drugs: IInvoiceDrugCreateDTO[];
 }
+
+export interface IPatientInvoiceResponse {
+  startDate: string;
+  endDate: string;
+  type: string;
+  institution: string;
+  rows: IInvoice[];
+}

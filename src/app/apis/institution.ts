@@ -40,5 +40,5 @@ export const getInstitutions = async (
 };
 
 export const getinstitutions = async (): Promise<IInstitution[]> => {
-  return (await api.get(`/institutions`)).data.data;
+  return (await api.get(`/institutions/all`)).data;
 };

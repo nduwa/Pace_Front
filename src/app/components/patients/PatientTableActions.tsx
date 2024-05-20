@@ -2,7 +2,8 @@ import {
   TrashIcon,
   PencilIcon,
   EyeIcon,
-  UsersIcon,
+  DocumentIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { FC, useState } from "react";
 import Protected from "../auth/Protected";
@@ -13,6 +14,7 @@ import { IPatient } from "../../types/pharmacy";
 import { deletePatient } from "../../apis/patients";
 import { PATIENTS } from "../../utils/constants/queryKeys";
 import PatientDetails from "./PatientDetail";
+import { Link } from "react-router-dom";
 
 interface IPatientTableActionsProps {
   patient: IPatient;
@@ -48,6 +50,14 @@ const PatientTableActions: FC<IPatientTableActionsProps> = ({ patient }) => {
             <PatientDetails patient={patient} />
           </Modal>
 
+          <Link
+            className='flex gap-2 py-1 px-2 hover:bg-gray-100 cursor-pointer'
+            onClick={() => update(id)}
+            to={`/patients/${patient.id}/invoices`}
+          >
+            <DocumentIcon className='w-4 text-blue' /> Invoices
+          </Link>
+
           <Protected permissions={["UPDATE_PATIENTS"]}>
             <div
               className='flex gap-2 py-1 px-2 hover:bg-gray-100 cursor-pointer'
@@ -71,7 +81,7 @@ const PatientTableActions: FC<IPatientTableActionsProps> = ({ patient }) => {
                   className='flex gap-2 py-1 px-2 hover:bg-gray-100 cursor-pointer'
                   onClick={() => setAddDependant(true)}
                 >
-                  <UsersIcon className='w-4 text-green' /> Add dependant
+                  <UserPlusIcon className='w-4 text-green' /> Dependant
                 </div>
                 {addDependant && (
                   <Modal
