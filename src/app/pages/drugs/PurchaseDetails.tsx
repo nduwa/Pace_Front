@@ -35,6 +35,8 @@ const PurchaseDetailsPage = () => {
     });
   };
 
+  console.log(data?.date);
+
   return (
     <PageContent
       className='w-full bg-white p-4 rounded-md'

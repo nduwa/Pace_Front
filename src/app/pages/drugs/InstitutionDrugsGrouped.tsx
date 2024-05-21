@@ -6,6 +6,8 @@ import { INSTITUTION_DRUGS_GROUPED } from "../../utils/constants/queryKeys";
 import Table from "../../components/table/Table";
 import { IInstitutionDrug, IInstitutionDrugResponse } from "../../types/pharmacy";
 import SearchComponent from "../../components/drugs/InstitutionDrugSearch";
+import TableActions from "../../components/table/TableActions";
+import InstitutionDrugTableActions from "../../components/drugs/InstitutionDrugTableActions";
 
 const InstitutionDrugsGrouped = () => {
   const [data, setData] = useState<IPaged<IInstitutionDrugResponse>>();
@@ -67,6 +69,18 @@ const InstitutionDrugsGrouped = () => {
       ),
     },
     { title: "Quantity", key: "totalQuantity" },
+    { title: "Price", key: "price" },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (row: IInstitutionDrug) => {
+        return (
+          <TableActions>
+            <InstitutionDrugTableActions drug={row} />
+          </TableActions>
+        );
+      },
+    },
   ];
   return (
     <div className='mt-6'>

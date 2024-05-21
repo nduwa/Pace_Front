@@ -1,4 +1,4 @@
-import PatientInvoices from "../pages/invoices/PatientInvoicesPage";
+import PatientInvoicesPage from "../pages/invoices/PatientInvoicesPage";
 import PatientsPage from "../pages/patients/PatientsPage";
 import { IRoute } from "../types/common";
 
@@ -10,7 +10,7 @@ const patientsRoutes: IRoute[] = [
   },
   {
     path: "/patients/:id/invoices",
-    element: PatientInvoices,
+    element: PatientInvoicesPage,
     allowedPermissionGroup: "PATIENTS",
   },
 ];

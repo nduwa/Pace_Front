@@ -4,7 +4,7 @@ import { DocumentArrowDownIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import Protected from "../../components/auth/Protected";
 import Button from "../../components/common/form/Button";
-import { PURCHASES } from "../../utils/constants/queryKeys";
+import { INVOICES } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
 import { IInvoice, IInvoiceResponse } from "../../types/pharmacy";
@@ -31,7 +31,7 @@ const DrugInvoices = () => {
   const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const { data: response, isLoading } = useQuery({
     queryFn: () => getInvoices(),
-    queryKey: PURCHASES,
+    queryKey: INVOICES,
   });
 
   const drugInvoicesMutation = useMutation(getInvoices);

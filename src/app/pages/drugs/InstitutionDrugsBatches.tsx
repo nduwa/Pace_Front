@@ -82,6 +82,7 @@ const InstitutionDrugsBatches = () => {
         </div>
       ),
     },
+    { title: "Price", key: "price" },
     {
       title: "Expire Date",
       key: "drugCategory",

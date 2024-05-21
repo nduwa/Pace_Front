@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import Modal from "../common/Modal";
 import PatientSelect from "../patients/PatientSelect";
+import PatientInvoicesModal from "../patients/PatientInvoicesModal";
 
 type costObject = {
   unitPrice: number;
@@ -43,6 +44,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
 
   const [patient, setPatient] = useState<IPatient>();
   const [selectPatientOpen, setSelectPatientOpen] = useState(false);
+  const [viewHistory, setViewHistory] = useState(false);
 
   const createInvoiceMutation = useMutation(createInvoice);
 
@@ -107,7 +109,6 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
     <div className='w-full'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col'>
-          <div>Patient</div>
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             <TextField
               type='text'
@@ -137,7 +138,10 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
             </div>
             {patient && (
               <>
-                <div className='py-1 px-2 text-green-500 bg-white cursor-pointer'>
+                <div
+                  className='py-1 px-2 text-green-500 bg-white cursor-pointer'
+                  onClick={() => setViewHistory(true)}
+                >
                   View history
                 </div>
                 <div
@@ -163,6 +167,16 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
             setPatient={setPatient}
           />
         </Modal>
+        {patient && viewHistory && (
+          <Modal
+            isOpen={viewHistory}
+            onClose={() => setViewHistory(false)}
+            title={`${patient.patientNO} ${patient.name}`}
+            big={true}
+          >
+            <PatientInvoicesModal patientId={patient.id} />
+          </Modal>
+        )}
 
         <div className='mt-6'>
           <div className='space-y-2'>

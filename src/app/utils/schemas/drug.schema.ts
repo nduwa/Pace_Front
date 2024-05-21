@@ -8,6 +8,10 @@ export const drugSchema = z.object({
   drugCategory: z.string().max(255, "Too long").min(1, "Selling unit is required"),
 });
 
+export const priceSchema = z.object({
+  price: z.coerce.number().min(0.1, "Selling unit is required"),
+});
+
 export const createPurchaseSchema = z.object({
   note: z.string().max(255, "Too long").optional(),
   date: z.string().min(10, "Valid date is required"),

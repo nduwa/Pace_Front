@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import PageContent from "../../components/common/PageContent";
-import { PURCHASE } from "../../utils/constants/queryKeys";
+import { INVOICE } from "../../utils/constants/queryKeys";
 import { format } from "date-fns";
 import Table from "../../components/table/Table";
 import { getInvoice } from "../../apis/invoice";
@@ -14,7 +14,7 @@ const InvoiceDetailsPage = () => {
   const { id } = useParams();
   const { data, isLoading } = useQuery({
     queryFn: () => getInvoice(id as string),
-    queryKey: PURCHASE,
+    queryKey: INVOICE,
   });
 
   const openPrintableInvoice = () => {
