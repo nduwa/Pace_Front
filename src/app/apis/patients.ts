@@ -1,5 +1,10 @@
 import { IPaged, IUUID } from "../types/common";
-import { IPatient, IPatientRequest, IPatientsResponse } from "../types/pharmacy";
+import {
+  IPatient,
+  IPatientInvoiceResponse,
+  IPatientRequest,
+  IPatientsResponse,
+} from "../types/pharmacy";
 import api from "./api";
 
 export const createPatient = async (data: IPatientRequest): Promise<IPatient> => {
@@ -29,6 +34,15 @@ export const getPatients = async (
   return (await api.get(`/patients${queryParams}`)).data;
 };
 
-export const getpatients = async (): Promise<IPatient[]> => {
-  return (await api.get(`/patients/all`)).data;
+export const getpatients = async (params?: string): Promise<IPatient[]> => {
+  const queryParams = params ? params : "";
+  return (await api.get(`/patients/all${queryParams}`)).data;
+};
+
+export const getPatientInvoices = async (data: {
+  id: IUUID;
+  params?: string;
+}): Promise<IPaged<IPatientInvoiceResponse>> => {
+  const queryParams = data.params ? data.params : "";
+  return (await api.get(`/patients/${data.id}/invoices${queryParams}`)).data;
 };

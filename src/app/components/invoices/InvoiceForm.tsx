@@ -1,22 +1,20 @@
-import ReactDOM from "react-dom";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { FC, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { ICreateInvoiceDTO, IInstitutionDrug, IInvoice } from "../../types/pharmacy";
+import { FC, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { ICreateInvoiceDTO, IInstitutionDrug, IPatient } from "../../types/pharmacy";
 import TextField from "../common/form/TextField";
 import Button from "../common/form/Button";
 import ComboboxField from "../common/form/ComboboxField";
 import { createInvoiceSchema } from "../../utils/schemas/invoice.shema";
 import { createInvoice } from "../../apis/invoice";
-import { getpatients } from "../../apis/patients";
-import { PATIENTS_NPAGED } from "../../utils/constants/queryKeys";
-import InvoiceDetailsComponent from "./InvoiceDetailsComponent";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import Modal from "../common/Modal";
+import PatientSelect from "../patients/PatientSelect";
 
 type costObject = {
   unitPrice: number;
@@ -43,22 +41,8 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
 
   const navigate = useNavigate();
 
-  const openPrintableInvoice = (invoice: IInvoice) => {
-    const newWindow = window.open("", "_blank") as Window;
-    newWindow.document.write(
-      "<html><head><title>Printable Invoice</title></head><body>",
-    );
-    newWindow.document.write('<div id="printableInvoice"></div>');
-    newWindow.document.write("</body></html>");
-    newWindow.document.close();
-
-    const printableInvoiceDiv =
-      newWindow.document.getElementById("printableInvoice");
-    ReactDOM.render(
-      <InvoiceDetailsComponent invoice={invoice} />,
-      printableInvoiceDiv,
-    );
-  };
+  const [patient, setPatient] = useState<IPatient>();
+  const [selectPatientOpen, setSelectPatientOpen] = useState(false);
 
   const createInvoiceMutation = useMutation(createInvoice);
 
@@ -71,28 +55,15 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
     name: "drugs",
   });
 
-  const { data: patients } = useQuery({
-    queryFn: getpatients,
-    queryKey: PATIENTS_NPAGED,
-  });
-
   const onSubmit = (data: Partial<ICreateInvoiceDTO>) => {
     createInvoiceMutation.mutate(data as ICreateInvoiceDTO, {
-      onSuccess: (invoice: IInvoice) => {
+      onSuccess: () => {
         toast.success("Invoice Created");
-        openPrintableInvoice(invoice);
         fields.forEach((_, index) => remove(index));
         reset();
         navigate("/invoices");
       },
     });
-  };
-
-  const changePatient = (value: string) => {
-    setValue("patientId", value);
-    const patient = patients?.find((p) => p.id === value);
-    setValue("name", patient?.name || "");
-    setValue("phone", patient?.phone || "");
   };
 
   const changeCosts = () => {
@@ -120,34 +91,79 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
     setDrugsCost(newCostArray);
   };
 
+  const changePatient = () => {
+    setValue("patientId", patient?.id || "");
+    setValue("name", patient?.name || "");
+    setValue("phone", patient?.phone || "");
+  };
+
+  useEffect(() => {
+    if (patient) {
+      changePatient();
+    }
+  }, [patient]);
+
   return (
     <div className='w-full'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-          <ComboboxField
-            label='Patient  (optional)'
-            options={
-              patients?.map((patient) => ({
-                value: patient.id,
-                label: `${patient.patientNO}: ${patient.name} ${patient.NID}`,
-              })) || []
-            }
-            error={errors.patientId?.message}
-            onChange={changePatient}
-          />
-          <TextField
-            error={errors.name?.message}
-            label='Name'
-            type='text'
-            register={register("name")}
-          />
-          <TextField
-            error={errors.phone?.message}
-            label='Phone'
-            type='text'
-            register={register("phone")}
-          />
+        <div className='flex flex-col'>
+          <div>Patient</div>
+          <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
+            <TextField
+              type='text'
+              value={patient?.patientNO}
+              disabled={true}
+              label='Patient NO'
+            />
+            <TextField
+              error={errors.name?.message}
+              label='Name'
+              type='text'
+              register={register("name")}
+            />
+            <TextField
+              error={errors.phone?.message}
+              label='Phone'
+              type='text'
+              register={register("phone")}
+            />
+          </div>
+          <div className='flex space-x-3'>
+            <div
+              className='py-1 px-2 text-darkblue bg-white cursor-pointer'
+              onClick={() => setSelectPatientOpen(true)}
+            >
+              {patient ? "Change" : "Select"}
+            </div>
+            {patient && (
+              <>
+                <div className='py-1 px-2 text-green-500 bg-white cursor-pointer'>
+                  View history
+                </div>
+                <div
+                  className='py-1 px-2 text-red-500 bg-white cursor-pointer'
+                  onClick={() => setPatient(undefined)}
+                >
+                  Remove
+                </div>
+              </>
+            )}
+          </div>
         </div>
+
+        <Modal
+          isOpen={selectPatientOpen}
+          onClose={() => setSelectPatientOpen(false)}
+          title={`${patient ? "Change" : "Select"} patient`}
+          big={true}
+        >
+          <PatientSelect
+            setIsOpen={setSelectPatientOpen}
+            patient={patient}
+            setPatient={setPatient}
+          />
+        </Modal>
+
         <div className='mt-6'>
           <div className='space-y-2'>
             <table border={1} className='w-full border-spacing-4 border-separate'>
@@ -156,6 +172,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
                   <th colSpan={3}>Drug Batch Number</th>
                   <th>Quantity</th>
                   <th>Expire</th>
+                  <th>Unit Price</th>
                   <th>SubTotal</th>
                   <th>_</th>
                 </tr>
@@ -204,6 +221,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
                       />
                     </td>
                     <td>{drugsCost[index]?.expireDate}</td>
+                    <td>{drugsCost[index]?.unitPrice}</td>
                     <td>{drugsCost[index]?.total} RWF</td>
                     <td className='px-2'>
                       <TrashIcon

@@ -16,6 +16,10 @@ export const getAllUsers = async (
   return (await api.get(`/users${queryParams}`)).data;
 };
 
+export const getAllUsersNPaged = async (): Promise<IUser[]> => {
+  return (await api.get(`/users/all`)).data;
+};
+
 export const createUser = async (user: ICreateUser): Promise<IUser> => {
   return (await api.post("/users", user)).data;
 };
