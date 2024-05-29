@@ -222,3 +222,8 @@ export interface IPatientInvoiceResponse {
   institution: string;
   rows: IInvoice[];
 }
+
+export interface IPriceChange {
+  price: number;
+  id?: string;
+}

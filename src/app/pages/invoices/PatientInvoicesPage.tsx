@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { DocumentArrowDownIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { PURCHASES } from "../../utils/constants/queryKeys";
+import { PATIENT_INVOICES } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
 import { IInvoice, IPatientInvoiceResponse } from "../../types/pharmacy";
@@ -15,7 +15,7 @@ import InvoiceDetails from "../../components/invoices/InvoiceDetails";
 import { getPatient, getPatientInvoices } from "../../apis/patients";
 import PatientInvoiceTableFilters from "../../components/patients/PatientInvoiceTableFilters";
 
-const PatientInvoices = () => {
+const PatientInvoicesPage = () => {
   const patientId = useParams().id as string;
 
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const PatientInvoices = () => {
   const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const { data: response, isLoading } = useQuery({
     queryFn: () => getPatientInvoices({ id: patientId }),
-    queryKey: PURCHASES,
+    queryKey: PATIENT_INVOICES,
   });
 
   const { data: patient, isLoading: patientLoading } = useQuery({
@@ -191,4 +191,4 @@ const PatientInvoices = () => {
   );
 };
 
-export default PatientInvoices;
+export default PatientInvoicesPage;

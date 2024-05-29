@@ -5,6 +5,7 @@ import {
   EyeDropperIcon,
   FolderOpenIcon,
   ShieldCheckIcon,
+  ShoppingCartIcon,
   UsersIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -91,7 +92,7 @@ const Sidebar = () => {
             {!isSudo && (
               <>
                 <Protected permissions={["INSTITUTION_ADMIN"]}>
-                  {user && user.institution.institutionId == null && (
+                  {user && user.institution?.institutionId == null && (
                     <SidebarLink
                       text='Branches'
                       to='/branches'
@@ -145,7 +146,7 @@ const Sidebar = () => {
               <SidebarDropdownLink
                 text='Sell drugs'
                 to='/invoices'
-                Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                Icon={<ShoppingCartIcon className='w-5 stroke-2 text-white' />}
                 links={[
                   {
                     label: "Invoices",

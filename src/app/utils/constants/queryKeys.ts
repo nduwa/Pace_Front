@@ -35,3 +35,7 @@ export const TRANSACTION = ["transaction"];
 
 export const PATIENTS = ["patients"];
 export const PATIENTS_NPAGED = ["patients_npaged"];
+export const PATIENT_INVOICES = ["patient_invoices"];
+
+export const INVOICE = ["invoice"];
+export const INVOICES = ["invoices"];

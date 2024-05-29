@@ -11,6 +11,7 @@ import {
   IDrugResponse,
   IInstitutionDrug,
   IInstitutionDrugResponse,
+  IPriceChange,
   IPurchase,
   IPurchaseWithDrugs,
 } from "../types/pharmacy";
@@ -136,4 +137,10 @@ export const getdrugCategories = async (
 
 export const getdrugCategoriesNPaged = async (): Promise<IDrugCategory[]> => {
   return (await api.get(`/drug-categories/all`)).data;
+};
+
+export const updateDrugPrice = async (
+  data: IPriceChange,
+): Promise<IDrugCategory> => {
+  return (await api.put(`/drugs/${data.id}/priceS`, data)).data;
 };

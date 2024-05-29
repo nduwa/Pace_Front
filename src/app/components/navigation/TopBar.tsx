@@ -17,7 +17,7 @@ const TopBar = () => {
             <div className='font-bold text-md'>
               {user?.institution ? user.institution.name : "ADMIN"}
             </div>
-            {user?.institution.parentInstitution && (
+            {user?.institution?.parentInstitution && (
               <div className='font-light text-xs'>
                 {user.institution.parentInstitution.name}
               </div>
