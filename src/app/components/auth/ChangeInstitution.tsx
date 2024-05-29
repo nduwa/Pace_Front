@@ -4,11 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, FC, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { ChangeInstitution, IInstitution } from "../../types/common";
-import { INSTITUTIONS } from "../../utils/constants/queryKeys";
+import { USER_PROFILE } from "../../utils/constants/queryKeys";
 import OptionsField from "../common/form/OptionsField";
 import Button from "../common/form/Button";
 import { changeInstitutionSchema } from "../../utils/schemas/auth.schema";
 import { changeInstitution } from "../../apis/auth";
+import { useNavigate } from "react-router-dom";
 
 interface IInstitutionUpdateForm {
   institutions: IInstitution[];
@@ -25,7 +26,6 @@ const ChangeInstitutionForm: FC<IInstitutionUpdateForm> = ({
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ChangeInstitution>({
     resolver: zodResolver(changeInstitutionSchema),
@@ -34,16 +34,17 @@ const ChangeInstitutionForm: FC<IInstitutionUpdateForm> = ({
     },
   });
 
-  const createInstitutionMutation = useMutation(changeInstitution);
+  const navigate = useNavigate();
+  const changeInstitutionMutation = useMutation(changeInstitution);
 
   const onSubmit = (data: ChangeInstitution) => {
     if (data.institutionId != selected) {
-      createInstitutionMutation.mutate(data, {
+      changeInstitutionMutation.mutate(data, {
         onSuccess() {
           toast.success("Institution created successfully");
           setIsOpen(false);
-          queryClient.invalidateQueries(INSTITUTIONS);
-          reset();
+          queryClient.invalidateQueries(USER_PROFILE);
+          navigate("/", { replace: true });
         },
       });
     }
@@ -61,14 +62,18 @@ const ChangeInstitutionForm: FC<IInstitutionUpdateForm> = ({
             defaultLabel='Select type'
             options={institutions?.map((institution) => ({
               value: institution.id,
-              label: institution.name,
+              label: `${institution.name} ${
+                institution.parentInstitution
+                  ? ` (${institution.parentInstitution.name})`
+                  : ""
+              }`,
             }))}
           />
         </div>
 
         <div className='py-4 mx-auto flex items-center justify-end md:justify-start md:flex-start space-x-2'>
           <Button
-            isLoading={createInstitutionMutation.isLoading}
+            isLoading={changeInstitutionMutation.isLoading}
             label={"Change Institution"}
           />
         </div>

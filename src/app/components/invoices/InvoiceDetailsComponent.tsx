@@ -72,6 +72,8 @@ const InvoiceDetailsComponent: FC<props> = ({ invoice }) => {
           <div>
             <p>Date:{format(new Date(invoice.createdAt), "dd-MM-yyyy")}</p>
             <p>Served By: {invoice.user?.name}</p>
+            <p>Institution: {invoice.institution?.name}</p>
+            <p>Branch: {invoice.institution?.parentInstitution?.name || "Main"}</p>
             <p>Invoice NO: {invoice.invoiceNO}</p>
             <p>Name: {invoice.name}</p>
             <p>Phone: {invoice.phone}</p>

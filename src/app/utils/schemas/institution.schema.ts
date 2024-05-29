@@ -13,3 +13,11 @@ export const institutionSchema = z.object({
     TIN: z.string().min(1, "Invalid TIN"),
   }),
 });
+
+export const branchSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  details: z.object({
+    location: z.string().min(1, "Location is required"),
+    TIN: z.string().min(1, "Invalid TIN"),
+  }),
+});
