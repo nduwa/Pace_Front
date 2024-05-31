@@ -15,6 +15,7 @@ const ApiClient = () => {
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
+      console.log(error);
       const errorObj = error as AxiosError;
       if (errorObj.response?.status == 401) {
         window.location.href = "/login";

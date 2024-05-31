@@ -25,6 +25,14 @@ const appPersmissions = [
     ],
   },
   {
+    group: "INVOICES",
+    permissions: ["VIEW_INVOICES"],
+  },
+  {
+    group: "TRANSACTIONS",
+    permissions: ["VIEW_TRANSACTIONS", "UPDATE_TRANSACTIONS"],
+  },
+  {
     group: "PATIENTS",
     permissions: ["VIEW_PATIENTS", "UPDATE_PATIENTS"],
   },

@@ -20,7 +20,7 @@ import InvoiceTableFilters from "../../components/invoices/InvoiceTableFilters";
 const InvoiceActions = () => {
   return (
     <Protected permissions={["SERVE_MEDECINES"]}>
-      <Button to='/invoices/add' label='Add' />
+      <Button to='/serve-medecines' label='Add' />
     </Protected>
   );
 };

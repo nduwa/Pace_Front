@@ -71,16 +71,16 @@ const InvoiceDetailsComponent: FC<props> = ({ invoice }) => {
         <div className='header flex justify-between'>
           <div>
             <p>Date:{format(new Date(invoice.createdAt), "dd-MM-yyyy")}</p>
-            <p>Served By: {invoice.user?.name}</p>
-            <p>Institution: {invoice.institution?.name}</p>
             <p>Branch: {invoice.institution?.parentInstitution?.name || "Main"}</p>
             <p>Invoice NO: {invoice.invoiceNO}</p>
+            {invoice.patient && <p>{invoice.patient.patientNO}</p>}
             <p>Name: {invoice.name}</p>
             <p>Phone: {invoice.phone}</p>
           </div>
-          {invoice.patient && (
-            <div className='text-lg patientNo'>{invoice.patient.patientNO}</div>
-          )}
+          <div>
+            <h2>{invoice.user?.name}</h2>
+            <p>Branch: {invoice.institution?.parentInstitution?.name || "Main"}</p>
+          </div>
         </div>
 
         <div className='mt-4'>

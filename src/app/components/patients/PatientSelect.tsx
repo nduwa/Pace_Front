@@ -54,7 +54,7 @@ const PatientSelect: FC<ISelectPatient> = ({ patient, setIsOpen, setPatient }) =
                     {patient?.id == row.id && <span>Selected</span>}
                     {patient?.id !== row.id && (
                       <span
-                        className='text-darkblue'
+                        className='text-darkblue px-2 py-1.5 border border-darkblue rounded-md cursor-pointer'
                         onClick={() => {
                           setPatient(row);
                           setIsOpen(false);

@@ -7,17 +7,17 @@ const invoicessRoutes: IRoute[] = [
   {
     path: "invoices",
     element: DrugInvoices,
-    allowedPermissionGroup: ["MEDECINES"],
+    allowedPermissions: ["SERVE_MEDECINES", "VIEW_INVOICES"],
   },
   {
-    path: "invoices/add",
+    path: "serve-medecines",
     element: InvoiceFormPage,
     allowedPermissions: ["SERVE_MEDECINE"],
   },
   {
     path: "/invoices/:id",
     element: InvoiceDetailsPage,
-    allowedPermissionGroup: "SERVE_MEDECINE",
+    allowedPermissions: ["SERVE_MEDECINES", "VIEW_INVOICES", "VIEW_PATIENTS"],
   },
 ];
 
