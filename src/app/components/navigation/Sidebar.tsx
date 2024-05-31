@@ -2,10 +2,12 @@ import {
   BuildingOffice2Icon,
   ChartBarIcon,
   CurrencyDollarIcon,
+  DocumentCheckIcon,
   EyeDropperIcon,
   FolderOpenIcon,
   ShieldCheckIcon,
   ShoppingCartIcon,
+  Square3Stack3DIcon,
   UsersIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -16,7 +18,6 @@ import { HasPermissionGroup } from "../../helpers/HasPermissionGroup";
 import SidebarDropdownLink from "./SidebarDropdownLink";
 import Protected from "../auth/Protected";
 import { HasPermission } from "../../helpers/HasPermission";
-import { HasPermissions } from "../../helpers/HasPermissions";
 import { useContext } from "react";
 import { AuthContext } from "../../context/Auth";
 
@@ -64,12 +65,14 @@ const Sidebar = () => {
               />
             )}
 
-            <SidebarLink
-              text='Transactions'
-              to='/transactions'
-              Icon={<CurrencyDollarIcon className='w-5 stroke-2 text-white' />}
-            />
-            {isSudo && (
+            {HasPermissionGroup("TRANSACTIONS") && (
+              <SidebarLink
+                text='Transactions'
+                to='/transactions'
+                Icon={<CurrencyDollarIcon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+            <Protected permissions={["VIEW_MEDECINES"]}>
               <SidebarDropdownLink
                 text='Drugs'
                 to='/drugs'
@@ -87,7 +90,7 @@ const Sidebar = () => {
                   },
                 ]}
               />
-            )}
+            </Protected>
 
             {!isSudo && (
               <>
@@ -100,26 +103,17 @@ const Sidebar = () => {
                     />
                   )}
                 </Protected>
+
                 <Protected permissions={["VIEW_MEDECINES", "PURCHASE_MEDECINES"]}>
                   <SidebarDropdownLink
-                    text='Drugs'
-                    to='/drugs'
-                    Icon={<EyeDropperIcon className='w-5 stroke-2 text-white' />}
+                    text='Drugs Stock'
+                    to='/stock'
+                    Icon={<Square3Stack3DIcon className='w-5 stroke-2 text-white' />}
                     links={[
-                      {
-                        label: "Drugs",
-                        to: "/drugs",
-                        permissions: ["VIEW_MEDECINES"],
-                      },
                       {
                         label: "In stock",
                         to: "/stock",
                         permissions: ["VIEW_MEDECINES"],
-                      },
-                      {
-                        label: "Orders",
-                        to: "/drugs/orders",
-                        permissions: ["PURCHASE_MEDECINES"],
                       },
                       {
                         label: "Purchases",
@@ -127,39 +121,33 @@ const Sidebar = () => {
                         permissions: ["PURCHASE_MEDECINES"],
                       },
                       {
-                        label: "Add order",
-                        to: "/drugs/orders/add",
+                        label: "Orders",
+                        to: "/drugs/orders",
                         permissions: ["PURCHASE_MEDECINES"],
                       },
                       {
-                        label: "Categories",
-                        to: "/drugs/categories",
-                        permissions: ["VIEW_MEDECINES"],
+                        label: "Add order",
+                        to: "/drugs/orders/add",
+                        permissions: ["PURCHASE_MEDECINES"],
                       },
                     ]}
                   />
                 </Protected>
               </>
             )}
-
-            {HasPermissions(["SERVE_MEDECINES"]) && (
-              <SidebarDropdownLink
-                text='Sell drugs'
-                to='/invoices'
-                Icon={<ShoppingCartIcon className='w-5 stroke-2 text-white' />}
-                links={[
-                  {
-                    label: "Invoices",
-                    to: "/invoices",
-                    permissions: ["SERVE_MEDECINES"],
-                  },
-                  {
-                    label: "New Invoice",
-                    to: "/invoices/add",
-                    permissions: ["SERVE_MEDECINES"],
-                  },
-                ]}
-              />
+            {HasPermission(["SERVE_MEDECINES"]) && (
+              <>
+                <SidebarLink
+                  text='Invoices'
+                  to='/invoices'
+                  Icon={<DocumentCheckIcon className='w-5 stroke-2 text-white' />}
+                />
+                <SidebarLink
+                  text='Serve Medecine'
+                  to='/serve-medecines'
+                  Icon={<ShoppingCartIcon className='w-5 stroke-2 text-white' />}
+                />
+              </>
             )}
             {HasPermissionGroup("ADMIN") && (
               <SidebarLink

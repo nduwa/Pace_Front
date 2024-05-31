@@ -109,6 +109,14 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
     <div className='w-full'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col'>
+          <div className='flex mb-2'>
+            <div
+              className='py-2 px-2 text-white cursor-pointer bg-darkblue rounded-md'
+              onClick={() => setSelectPatientOpen(true)}
+            >
+              {patient ? "Change" : "Select"}
+            </div>
+          </div>
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             <TextField
               type='text'
@@ -130,12 +138,6 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
             />
           </div>
           <div className='flex space-x-3'>
-            <div
-              className='py-1 px-2 text-darkblue bg-white cursor-pointer'
-              onClick={() => setSelectPatientOpen(true)}
-            >
-              {patient ? "Change" : "Select"}
-            </div>
             {patient && (
               <>
                 <div
@@ -174,7 +176,7 @@ const InvoiceForm: FC<IInvoiceFormProps> = ({ drugs }) => {
             title={`${patient.patientNO} ${patient.name}`}
             big={true}
           >
-            <PatientInvoicesModal patientId={patient.id} />
+            <PatientInvoicesModal patient={patient} />
           </Modal>
         )}
 

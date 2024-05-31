@@ -8,21 +8,61 @@ import Protected from "../auth/Protected";
 export interface SidebarLinkProps {
   text: string;
   to: string;
-  optionalLinks?: string[];
   Icon: ReactElement;
   links: { to: string; label: string; permissions?: Permission[] }[];
 }
 
 const SidebarDropdownLink = (props: PropsWithChildren<SidebarLinkProps>) => {
-  const { Icon, text, to, optionalLinks } = props;
+  const { Icon, text, to, links } = props;
   const location = useLocation();
-  const isActive =
-    location.pathname.includes(to) ||
-    optionalLinks?.some((link) => location.pathname.includes(link));
+
+  const activeWhen = links.map((link) => link.to);
+  const isActive = (activeWhen || [to]).some((link) => location.pathname === link);
+
+  console.log(location.pathname);
+
+  if (isActive)
+    return (
+      <div className='flex justify-center mt-2 relative group'>
+        <div className={`relative w-full rounded-md data-[open]:${isActive}`}>
+          <div>
+            <div
+              className={`w-full flex p-2 text-gray-100 hover:text-white ${
+                isActive ? "bg-gray-100 bg-opacity-10 text-white" : ""
+              } hover:bg-gray-100 hover:bg-opacity-10 rounded-md space-5 items-center justify-between`}
+            >
+              <div className='flex w-full space-5'>
+                {Icon}
+                <div className='text-md font-medium ml-4'>{text}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className='w-full pl-9 mt-1' data-open={true}>
+            {props.links.map((link, index) => (
+              <Protected key={index} permissions={link.permissions ?? []}>
+                <div>
+                  <NavLink
+                    to={link.to}
+                    className={`w-full flex px-2 py-1 ${
+                      location.pathname == link.to
+                        ? "text-white underline"
+                        : "text-gray-300"
+                    } hover:text-white rounded-md space-5 items-center`}
+                  >
+                    <div className='text-sm font-medium'>{link.label}</div>
+                  </NavLink>
+                </div>
+              </Protected>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className='flex justify-center mt-2 relative group'>
-      <Menu as='div' className='relative w-full rounded-md'>
+      <Menu as='div' className={`relative w-full rounded-m`}>
         <div>
           <Menu.Button
             className={`w-full flex p-2 text-gray-100 hover:text-white ${
@@ -56,7 +96,7 @@ const SidebarDropdownLink = (props: PropsWithChildren<SidebarLinkProps>) => {
                     <NavLink
                       to={link.to}
                       className={`w-full flex px-2 py-1 ${
-                        active ? "text-white" : "text-gray-100"
+                        active ? "text-white" : "text-gray-300"
                       } hover:text-white rounded-md space-5 items-center`}
                     >
                       <div className='text-sm font-medium'>{link.label}</div>

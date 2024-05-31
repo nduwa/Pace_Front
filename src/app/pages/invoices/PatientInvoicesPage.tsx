@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { DocumentArrowDownIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
+import { useNavigate, useParams } from "react-router-dom";
 import { PATIENT_INVOICES } from "../../utils/constants/queryKeys";
 import PageContent from "../../components/common/PageContent";
 import Table from "../../components/table/Table";
@@ -167,12 +167,6 @@ const PatientInvoicesPage = () => {
             key: "",
             render: (invoice: IInvoice) => (
               <div className='flex gap-1'>
-                <Link
-                  to={`/invoices/${invoice.id}`}
-                  className='flex gap-2 hover:bg-gray-50 p-2 cursor-pointer'
-                >
-                  <EyeIcon className='w-5 text-blue' />
-                </Link>
                 <DocumentArrowDownIcon
                   className='w-5 text-green'
                   onClick={() => openPrintableInvoice(invoice)}
