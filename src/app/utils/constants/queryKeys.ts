@@ -39,3 +39,6 @@ export const PATIENT_INVOICES = ["patient_invoices"];
 
 export const INVOICE = ["invoice"];
 export const INVOICES = ["invoices"];
+
+export const EXAMS = ["exams"];
+export const EXAMS_NPAGED = ["exams_npaged"];
