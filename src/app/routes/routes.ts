@@ -1,6 +1,7 @@
 import Secure from "../pages/secure/Secure";
 import { IRoute } from "../types/common";
 import drugsRoutes from "./drugs.routes";
+import examRoutes from "./exams.route";
 import institionsRoute from "./institution.route";
 import invoicessRoutes from "./invoices.route";
 import patientsRoutes from "./patients.rountes";
@@ -21,5 +22,6 @@ const routes: IRoute[] = [
   ...patientsRoutes,
   ...transactionRoutes,
   ...invoicessRoutes,
+  ...examRoutes,
 ];
 export default routes;

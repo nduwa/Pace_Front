@@ -1,4 +1,5 @@
 import {
+  BeakerIcon,
   BuildingOffice2Icon,
   ChartBarIcon,
   CurrencyDollarIcon,
@@ -72,6 +73,15 @@ const Sidebar = () => {
                 Icon={<CurrencyDollarIcon className='w-5 stroke-2 text-white' />}
               />
             )}
+
+            {HasPermissionGroup("EXAMS") && (
+              <SidebarLink
+                text='Exams'
+                to='/exams'
+                Icon={<BeakerIcon className='w-5 stroke-2 text-white' />}
+              />
+            )}
+
             <Protected permissions={["VIEW_MEDECINES"]}>
               <SidebarDropdownLink
                 text='Drugs'
@@ -133,22 +143,25 @@ const Sidebar = () => {
                     ]}
                   />
                 </Protected>
+
+                {HasPermissionGroup("INVOICES") && (
+                  <SidebarLink
+                    text='Invoices'
+                    to='/invoices'
+                    Icon={<DocumentCheckIcon className='w-5 stroke-2 text-white' />}
+                  />
+                )}
+
+                {HasPermission(["SERVE_MEDECINES"]) && (
+                  <SidebarLink
+                    text='Serve Medecine'
+                    to='/serve-medecines'
+                    Icon={<ShoppingCartIcon className='w-5 stroke-2 text-white' />}
+                  />
+                )}
               </>
             )}
-            {HasPermission(["SERVE_MEDECINES"]) && (
-              <>
-                <SidebarLink
-                  text='Invoices'
-                  to='/invoices'
-                  Icon={<DocumentCheckIcon className='w-5 stroke-2 text-white' />}
-                />
-                <SidebarLink
-                  text='Serve Medecine'
-                  to='/serve-medecines'
-                  Icon={<ShoppingCartIcon className='w-5 stroke-2 text-white' />}
-                />
-              </>
-            )}
+
             {HasPermissionGroup("ADMIN") && (
               <SidebarLink
                 text='Roles'

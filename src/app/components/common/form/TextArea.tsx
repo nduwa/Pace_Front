@@ -8,6 +8,7 @@ interface ITextArea {
   value?: string;
   disabled?: boolean;
   onValueChage?: (value: string) => void;
+  rows?: number;
 }
 const TextArea: FC<ITextArea> = ({
   label,
@@ -16,6 +17,7 @@ const TextArea: FC<ITextArea> = ({
   value = "",
   disabled = false,
   onValueChage,
+  rows = 5,
 }) => {
   return (
     <div className='block min-w-full'>
@@ -24,7 +26,7 @@ const TextArea: FC<ITextArea> = ({
       </label>
       <div className='mt-2 min-w-full'>
         <textarea
-          rows={5}
+          rows={rows}
           {...register}
           defaultValue={value}
           onChange={(e) => onValueChage && onValueChage(e.target.value)}

@@ -86,6 +86,7 @@ const ExamForm: FC<IExamForm> = ({ exam, setIsOpen }) => {
             label='Description'
             error={errors.description?.message}
             register={register("description")}
+            rows={2}
           />
         </div>
         <div className='grid'></div>
