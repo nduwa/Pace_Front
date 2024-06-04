@@ -170,3 +170,20 @@ export interface ITransactionResponse {
   type: string;
   rows: ITransactionDTO[];
 }
+
+export interface IConsultation {
+  id: string;
+  institutionId: string;
+  price: number;
+  label: string;
+  createdAt: Date;
+}
+
+export interface IConsultationRequest
+  extends Pick<IConsultation, "price" | "label"> {
+  id?: string;
+}
+
+export interface IConsultationResponse {
+  rows: IConsultation[];
+}

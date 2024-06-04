@@ -75,7 +75,8 @@ const ExamForm: FC<IExamForm> = ({ exam, setIsOpen }) => {
           />
           <TextField
             label='Price'
-            type='text'
+            type='number'
+            allowFloats={true}
             error={errors.price?.message}
             register={register("price")}
           />

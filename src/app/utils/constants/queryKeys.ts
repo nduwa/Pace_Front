@@ -42,3 +42,6 @@ export const INVOICES = ["invoices"];
 
 export const EXAMS = ["exams"];
 export const EXAMS_NPAGED = ["exams_npaged"];
+
+export const CONSULTATIONS = ["consultations"];
+export const CONSULTATIONS_NPAGED = ["consultations_npaged"];

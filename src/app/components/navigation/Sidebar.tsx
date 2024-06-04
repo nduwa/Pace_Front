@@ -6,6 +6,7 @@ import {
   DocumentCheckIcon,
   EyeDropperIcon,
   FolderOpenIcon,
+  HeartIcon,
   ShieldCheckIcon,
   ShoppingCartIcon,
   Square3Stack3DIcon,
@@ -105,6 +106,14 @@ const Sidebar = () => {
             {!isSudo && (
               <>
                 <Protected permissions={["INSTITUTION_ADMIN"]}>
+                  {user && user.institution?.institutionType == "CLINIC" && (
+                    <SidebarLink
+                      text='Consultations'
+                      to='/consultations'
+                      Icon={<HeartIcon className='w-5 stroke-2 text-white' />}
+                    />
+                  )}
+
                   {user && user.institution?.institutionId == null && (
                     <SidebarLink
                       text='Branches'
