@@ -5,11 +5,16 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Permission } from "../../constants/permissions";
 import Protected from "../auth/Protected";
 
+export type IDropdownLink = {
+  to: string;
+  label: string;
+  permissions?: Permission[];
+};
 export interface SidebarLinkProps {
   text: string;
   to: string;
   Icon: ReactElement;
-  links: { to: string; label: string; permissions?: Permission[] }[];
+  links: IDropdownLink[];
 }
 
 const SidebarDropdownLink = (props: PropsWithChildren<SidebarLinkProps>) => {
@@ -18,8 +23,6 @@ const SidebarDropdownLink = (props: PropsWithChildren<SidebarLinkProps>) => {
 
   const activeWhen = links.map((link) => link.to);
   const isActive = (activeWhen || [to]).some((link) => location.pathname === link);
-
-  console.log(location.pathname);
 
   if (isActive)
     return (

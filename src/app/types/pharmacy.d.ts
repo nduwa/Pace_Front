@@ -179,6 +179,8 @@ export interface IInvoice {
   institution?: IInstitution;
   drugs?: IInvoiceDrug[];
   user?: IUser;
+  exams?: IInvoiceDrug[];
+  consultations?: IInvoiceDrug[];
 }
 
 export interface IInvoiceDrug {
@@ -195,7 +197,31 @@ export interface IInvoiceDrug {
 
   drug?: IDrug;
 }
+export interface IInvoiceExam {
+  id: string;
+  patientId: string | null;
+  institutionId: string;
+  examId: string;
+  invoiceId: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
 
+  exam?: IExam;
+}
+
+export interface IInvoiceConsultation {
+  id: string;
+  patientId: string | null;
+  institutionId: string;
+  consultationId: string;
+  invoiceId: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
+
+  consultation?: IConsultation;
+}
 export interface IInvoiceResponse {
   startDate: string;
   endDate: string;

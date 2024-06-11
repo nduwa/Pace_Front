@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { IInvoice } from "../../types/pharmacy";
 import { format } from "date-fns";
+import { IForm } from "../../types/forms";
 
 interface IProps {
-  data: IInvoice;
+  data: IForm;
   closeDrawer?: () => void;
 }
 const InvoiceDetails: FC<IProps> = ({ data }) => {
@@ -11,13 +11,9 @@ const InvoiceDetails: FC<IProps> = ({ data }) => {
     <div className='relative'>
       <div className='w-full relative'>
         <div className='flex flex-col space-y-2 mb-6'>
-          <p>{data.invoiceNO}</p>
           <p>Date:{format(new Date(data.createdAt), "dd-MM-yyyy")}</p>
-          <p>Served By: {data.user?.name}</p>
           <p>Branch: {data.institution?.parentInstitution?.name || "Main"}</p>
-          <p>Invoice NO: {data.invoiceNO}</p>
-          <p>Name: {data.name}</p>
-          <p>Phone: {data.phone}</p>
+          <p>Form NO: {data.formNO}</p>
           {data.patient && (
             <>
               <p>PatientNO: {data.patient.patientNO}</p>
@@ -29,21 +25,15 @@ const InvoiceDetails: FC<IProps> = ({ data }) => {
         <table cellPadding={2} className='w-full'>
           <thead>
             <tr>
-              <th>DRUGS</th>
+              <th>#{data.formNO}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {data.drugs?.length === 0 && (
-              <tr>
-                <td colSpan={2}>No drugs</td>
-              </tr>
-            )}
             {data?.drugs?.map((drug) => (
               <tr key={drug.id} className='border'>
                 <td className='px-1.5 py-2'>{drug.drug?.designation}</td>
                 <td className='px-1.5 py-2'>{drug.quantity}</td>
-                <td className='px-1.5 py-2'>{drug.totalPrice}</td>
               </tr>
             ))}
           </tbody>

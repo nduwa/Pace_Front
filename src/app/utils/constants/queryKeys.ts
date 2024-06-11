@@ -45,3 +45,10 @@ export const EXAMS_NPAGED = ["exams_npaged"];
 
 export const CONSULTATIONS = ["consultations"];
 export const CONSULTATIONS_NPAGED = ["consultations_npaged"];
+
+export const FORMS = ["forms"];
+export const FORMS_NPAGED = ["forms_npaged"];
+export const FORM = ["form"];
+export const FORMS_LOCATIONS = ["forms_locations"];
+export const FORMS_BY_LOCATION = ["forms_by_location"];
+export const FORM_INVOICE = ["form_invoice"];

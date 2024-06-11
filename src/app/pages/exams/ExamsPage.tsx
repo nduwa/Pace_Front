@@ -11,6 +11,7 @@ import ExamTableActions from "../../components/exams/ExamTableActions";
 import { EXAMS } from "../../utils/constants/queryKeys";
 import { IExam, IExamResponse } from "../../types/exams";
 import { getExams } from "../../apis/exams";
+import Protected from "../../components/auth/Protected";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -22,7 +23,9 @@ const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
   };
   return (
     <>
-      <Button onClick={openCreateExamModal} label='Add exam' />
+      <Protected permissions={["UPDATE_EXAMS"]}>
+        <Button onClick={openCreateExamModal} label='Add exam' />
+      </Protected>
     </>
   );
 };
