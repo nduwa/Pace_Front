@@ -51,7 +51,7 @@ const FormTableFilters: FC<IFormTableFiltersProps> = ({
         <OptionsField
           required
           error={errors.at?.message}
-          label='Served by'
+          label='Form at'
           register={register("at")}
           defaultValue={defaultValues?.at}
           setValue={(value) => setValue("at", value)}
@@ -74,7 +74,7 @@ const FormTableFilters: FC<IFormTableFiltersProps> = ({
           register={register("isOpen")}
           defaultValue={defaultValues?.isOpen}
           setValue={(value) => setValue("isOpen", value)}
-          label='Drug isOpen'
+          label='Is Form Open'
           options={[
             { label: "All", value: "all", selected: true },
             ...isOpen.map((value) => ({

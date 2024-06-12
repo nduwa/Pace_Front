@@ -16,6 +16,12 @@ export interface IInvoiceFilter {
   requester: string;
 }
 
+export interface ITransactionFilter {
+  startDate: string;
+  endDate: string;
+  type: string;
+}
+
 export interface IFormFilter {
   at: string;
   isOpen: string;

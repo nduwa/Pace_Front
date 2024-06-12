@@ -5,7 +5,7 @@ import Modal from "../common/Modal";
 import TransactionForm from "./TransactionForm";
 import ConfirmDelete from "../common/ConfirmDelete";
 import { deleteTransaction } from "../../apis/transaction";
-import { TRANSACTION } from "../../utils/constants/queryKeys";
+import { TRANSACTIONS } from "../../utils/constants/queryKeys";
 
 interface ITransactionTableActionsProps {
   transaction: ITransaction;
@@ -51,7 +51,7 @@ const TransactionTableActions: FC<ITransactionTableActionsProps> = ({
                 await deleteTransaction(id);
                 return 1;
               }}
-              queryKey={TRANSACTION}
+              queryKey={TRANSACTIONS}
               setToDelete={setToDelete}
             />
           )}
