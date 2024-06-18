@@ -24,5 +24,5 @@ export const getExams = async (params?: string): Promise<IPaged<IExamResponse>> 
 };
 
 export const getexams = async (): Promise<IExam[]> => {
-  return (await api.get(`/exams/all`)).data.data;
+  return (await api.get(`/exams/all`)).data;
 };

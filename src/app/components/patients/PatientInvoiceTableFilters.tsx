@@ -64,8 +64,6 @@ const PatientInvoiceTableFilters: FC<IPatientInvoiceTableFiltersProps> = ({
     setValue("endDate", value);
   };
 
-  console.log(institutions);
-
   return (
     <div className='w-full flex flex-col gap-4'>
       <form onSubmit={handleSubmit(handleFilter)}>

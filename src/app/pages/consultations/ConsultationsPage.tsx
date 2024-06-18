@@ -1,5 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState, SetStateAction, Dispatch, FC, useEffect } from "react";
+import {
+  useState,
+  SetStateAction,
+  Dispatch,
+  FC,
+  useEffect,
+  useContext,
+} from "react";
 import Button from "../../components/common/form/Button";
 import { IConsultation, IConsultationResponse, IPaged } from "../../types/common";
 import PageContent from "../../components/common/PageContent";
@@ -11,6 +18,8 @@ import { CONSULTATIONS } from "../../utils/constants/queryKeys";
 import { getConsultations } from "../../apis/consultation";
 import ConsultationTableActions from "../../components/consultations/ConsulttionTableActions";
 import Protected from "../../components/auth/Protected";
+import { AuthContext } from "../../context/Auth";
+import Forbidden from "../../components/auth/Forbidden";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +39,7 @@ const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
 };
 
 const ConsultationsPage = () => {
+  const user = useContext(AuthContext)?.userProfile;
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<IPaged<IConsultationResponse>>();
   const [keyword, setKeyword] = useState<string>();
@@ -69,44 +79,50 @@ const ConsultationsPage = () => {
       actionsComponent={<ActionsComponent setIsOpen={setIsOpen} />}
     >
       <>
-        <Modal
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          title='Create consultation'
-        >
-          <ConsultationForm setIsOpen={setIsOpen} />
-        </Modal>
+        {user && user.institution.institutionType !== "CLINIC" && <Forbidden />}
 
-        <Table
-          isLoading={isLoading}
-          currentPage={data?.currentPage || 1}
-          totalItems={data?.totalItems || 30}
-          itemsPerPage={data?.itemsPerPage || 15}
-          onChangePage={onChangePage}
-          columns={[
-            {
-              title: "Label",
-              key: "label",
-            },
-            {
-              title: "Price",
-              key: "price",
-            },
-            {
-              title: "Actions",
-              key: "actions",
-              render: (row: IConsultation) => {
-                return (
-                  <TableActions>
-                    <ConsultationTableActions consultation={row} />
-                  </TableActions>
-                );
-              },
-            },
-          ]}
-          data={data?.data.rows || []}
-          searchFun={handleSearch}
-        />
+        {user && user.institution.institutionType === "CLINIC" && (
+          <>
+            <Modal
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              title='Create consultation'
+            >
+              <ConsultationForm setIsOpen={setIsOpen} />
+            </Modal>
+
+            <Table
+              isLoading={isLoading}
+              currentPage={data?.currentPage || 1}
+              totalItems={data?.totalItems || 30}
+              itemsPerPage={data?.itemsPerPage || 15}
+              onChangePage={onChangePage}
+              columns={[
+                {
+                  title: "Label",
+                  key: "label",
+                },
+                {
+                  title: "Price",
+                  key: "price",
+                },
+                {
+                  title: "Actions",
+                  key: "actions",
+                  render: (row: IConsultation) => {
+                    return (
+                      <TableActions>
+                        <ConsultationTableActions consultation={row} />
+                      </TableActions>
+                    );
+                  },
+                },
+              ]}
+              data={data?.data.rows || []}
+              searchFun={handleSearch}
+            />
+          </>
+        )}
       </>
     </PageContent>
   );

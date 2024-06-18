@@ -17,3 +17,8 @@ export const patientInvoiceFilterSchema = z.object({
   endDate: z.string(),
   institution: z.string(),
 });
+
+export const formFilterSchema = z.object({
+  at: z.string(),
+  isOpen: z.string(),
+});

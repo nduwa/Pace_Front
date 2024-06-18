@@ -2,12 +2,7 @@ import { FC, useState } from "react";
 import { IUserProfile } from "../../types/common";
 import Protected from "../auth/Protected";
 import Modal from "../common/Modal";
-import {
-  EyeIcon,
-  PencilIcon,
-  ShieldExclamationIcon,
-} from "@heroicons/react/24/outline";
-import AddUserForm from "./AddUserForm";
+import { EyeIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import GetUserDetails from "./GetUserDetails";
 import AccessControlForm from "./AccessControl";
 
@@ -16,7 +11,6 @@ interface IUsersTableActionsProps {
 }
 
 const UsersTableActions: FC<IUsersTableActionsProps> = ({ user }) => {
-  const [addUserModalOpened, setAddUserModalOpened] = useState<boolean>(false);
   const [userDetailsModalOpened, setUserDetailsModalOpened] =
     useState<boolean>(false);
   const [accessForm, setAccessForm] = useState(false);
@@ -36,22 +30,6 @@ const UsersTableActions: FC<IUsersTableActionsProps> = ({ user }) => {
       >
         <GetUserDetails userId={user.id || ""} />
       </Modal>
-
-      <Protected permissions={["UPDATE_USERS"]}>
-        <div
-          className='flex gap-2 py-1 px-2 hover:bg-gray-100 cursor-pointer'
-          onClick={() => setAddUserModalOpened(true)}
-        >
-          <PencilIcon className='w-4 text-darkblue' /> Update
-        </div>
-        <Modal
-          title={`Update User`}
-          isOpen={addUserModalOpened}
-          onClose={() => setAddUserModalOpened(false)}
-        >
-          <AddUserForm user={user} closeModal={() => setAddUserModalOpened(false)} />
-        </Modal>
-      </Protected>
 
       <Protected permissions={["INSTITUTION_ADMIN"]}>
         <div

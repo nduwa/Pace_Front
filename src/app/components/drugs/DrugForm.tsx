@@ -65,8 +65,6 @@ const DrugForm: FC<IDrugUpdateForm> = ({ drug, setIsOpen }) => {
     }
   };
 
-  console.log(drugCategorys);
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 flex-col'>

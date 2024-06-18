@@ -72,7 +72,7 @@ const DrugTableFilters: FC<IDrugTableFiltersProps> = ({
           register={register("isOnMarket")}
           defaultValue={defaultValues?.isOnMarket}
           setValue={(value) => setValue("isOnMarket", value)}
-          label='User isOnMarket'
+          label='Drug isOnMarket'
           options={[
             { label: "All", value: "all", selected: true },
             ...isOnMarket.map((value) => ({

@@ -7,7 +7,12 @@ import { INVOICE } from "../../utils/constants/queryKeys";
 import { format } from "date-fns";
 import Table from "../../components/table/Table";
 import { getInvoice } from "../../apis/invoice";
-import { IInvoice, IInvoiceDrug } from "../../types/pharmacy";
+import {
+  IInvoice,
+  IInvoiceConsultation,
+  IInvoiceDrug,
+  IInvoiceExam,
+} from "../../types/pharmacy";
 import InvoiceDetailsComponent from "../../components/invoices/InvoiceDetailsComponent";
 
 const InvoiceDetailsPage = () => {
@@ -65,10 +70,68 @@ const InvoiceDetailsPage = () => {
               />
             </div>
           </div>
+          {data.type === "CLINICAL_RECORD" && (
+            <div className='mt-4'>
+              <div className='grid md:grid-cols-2 gap-6'>
+                <div>
+                  <Table
+                    position='relative'
+                    data={data?.exams || []}
+                    headerComponent={
+                      <p className='font-bold text-md uppercase'>Exams</p>
+                    }
+                    columns={[
+                      {
+                        title: "Item",
+                        key: "item",
+                        render: (exam: IInvoiceExam) => (
+                          <span>
+                            {exam.exam?.exam_code}({exam.exam?.name})
+                          </span>
+                        ),
+                      },
+                      {
+                        title: "Price",
+                        key: "exam",
+                        render: (exam: IInvoiceExam) => <span>{exam.price}</span>,
+                      },
+                    ]}
+                  />
+                </div>
+
+                <div>
+                  <Table
+                    position='relative'
+                    data={data?.consultations || []}
+                    headerComponent={
+                      <p className='font-bold text-md uppercase'>Consultations</p>
+                    }
+                    columns={[
+                      {
+                        title: "Item",
+                        key: "item",
+                        render: (consultation: IInvoiceConsultation) => (
+                          <span>{consultation.consultation?.label}</span>
+                        ),
+                      },
+                      {
+                        title: "Price",
+                        key: "consultation",
+                        render: (consultation: IInvoiceConsultation) => (
+                          <span>{consultation.price}</span>
+                        ),
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           <div className='mt-4'>
             <Table
               position='relative'
               data={data?.drugs || []}
+              headerComponent={<p className='font-bold text-md uppercase'>Drugs</p>}
               columns={[
                 {
                   title: "Item",

@@ -5,8 +5,6 @@ import {
   CurrencyDollarIcon,
   DocumentCheckIcon,
   EyeDropperIcon,
-  FolderOpenIcon,
-  HeartIcon,
   ShieldCheckIcon,
   ShoppingCartIcon,
   Square3Stack3DIcon,
@@ -17,15 +15,66 @@ import SidebarLink from "./SidebarLink";
 import ToggleSidebar from "../../helpers/ToggleSidebar";
 import logo from "../../assets/logo-color.png";
 import { HasPermissionGroup } from "../../helpers/HasPermissionGroup";
-import SidebarDropdownLink from "./SidebarDropdownLink";
+import SidebarDropdownLink, { IDropdownLink } from "./SidebarDropdownLink";
 import Protected from "../auth/Protected";
 import { HasPermission } from "../../helpers/HasPermission";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/Auth";
+import { useQuery } from "@tanstack/react-query";
+import { FORMS_LOCATIONS } from "../../utils/constants/queryKeys";
+import { getLocations } from "../../apis/forms";
 
 const Sidebar = () => {
   const isSudo = HasPermission(["ALL_PERMISSIONS"], true);
   const user = useContext(AuthContext)?.userProfile;
+
+  const { data: locations } = useQuery({
+    queryKey: FORMS_LOCATIONS,
+    queryFn: getLocations,
+  });
+
+  const [formLinks, setFormLinks] = useState<IDropdownLink[]>();
+
+  const [manageLinks, setManageLinks] = useState<IDropdownLink[]>();
+
+  useEffect(() => {
+    if (!formLinks && locations !== undefined) {
+      setFormLinks(
+        locations.map((loc) => {
+          return {
+            to: `/forms/${loc}`,
+            label: loc,
+            permissions: [
+              "CONSULTATION",
+              "LABORATORY",
+              "PHARMACY",
+              "RECEIPTION",
+              "COUNTER",
+            ],
+          };
+        }),
+      );
+    }
+  }, [locations]);
+
+  useEffect(() => {
+    if (manageLinks === undefined && user) {
+      let links: IDropdownLink[] = [];
+      if (user && user.institution?.institutionType == "CLINIC") {
+        links.push({ label: "Consultations", to: "/consultations" });
+      }
+      if (user && user.institution?.institutionId == null) {
+        links.push({ label: "Branches", to: "/branches" });
+      }
+      links.push({
+        label: "Roles",
+        to: "/roles",
+      });
+
+      setManageLinks(links);
+    }
+  }, [user]);
+
   return (
     <div className='min-h-screen'>
       <div className='sidebar w-60 flex overflow-x-clip flex-col h-full justify-between border shadow duration-300 z-10 sidebar fixed top-0 bottom-0 left-[-300px] md:left-0 bg-darkblue'>
@@ -105,24 +154,6 @@ const Sidebar = () => {
 
             {!isSudo && (
               <>
-                <Protected permissions={["INSTITUTION_ADMIN"]}>
-                  {user && user.institution?.institutionType == "CLINIC" && (
-                    <SidebarLink
-                      text='Consultations'
-                      to='/consultations'
-                      Icon={<HeartIcon className='w-5 stroke-2 text-white' />}
-                    />
-                  )}
-
-                  {user && user.institution?.institutionId == null && (
-                    <SidebarLink
-                      text='Branches'
-                      to='/branches'
-                      Icon={<FolderOpenIcon className='w-5 stroke-2 text-white' />}
-                    />
-                  )}
-                </Protected>
-
                 <Protected permissions={["VIEW_MEDECINES", "PURCHASE_MEDECINES"]}>
                   <SidebarDropdownLink
                     text='Drugs Stock'
@@ -153,6 +184,41 @@ const Sidebar = () => {
                   />
                 </Protected>
 
+                {HasPermissionGroup("CLINIC") &&
+                  user?.institution !== null &&
+                  user?.institution.institutionType === "CLINIC" && (
+                    <SidebarDropdownLink
+                      text='Forms'
+                      to='/forms'
+                      Icon={
+                        <DocumentCheckIcon className='w-5 stroke-2 text-white' />
+                      }
+                      links={[
+                        {
+                          to: "forms",
+                          label: "All forms",
+                        },
+                        {
+                          to: "forms/new",
+                          label: "New form",
+                          permissions: ["RECEIPTION"],
+                        },
+                        ...(formLinks ? formLinks : []),
+                      ]}
+                    />
+                  )}
+
+                {HasPermission(["INSTITUTION_ADMIN"]) && (
+                  <SidebarDropdownLink
+                    text='Manage'
+                    to='/roles'
+                    Icon={
+                      <BuildingOffice2Icon className='w-5 stroke-2 text-white' />
+                    }
+                    links={[...(manageLinks ? manageLinks : [])]}
+                  />
+                )}
+
                 {HasPermissionGroup("INVOICES") && (
                   <SidebarLink
                     text='Invoices'
@@ -171,7 +237,7 @@ const Sidebar = () => {
               </>
             )}
 
-            {HasPermissionGroup("ADMIN") && (
+            {HasPermissionGroup("SUDO", true) && (
               <SidebarLink
                 text='Roles'
                 to='/roles'
