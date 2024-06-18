@@ -8,6 +8,10 @@ const appPersmissions = [
     permissions: ["VIEW_USERS", "UPDATE_USERS"],
   },
   {
+    group: "EXAMS",
+    permissions: ["VIEW_EXAMS", "UPDATE_EXAMS"],
+  },
+  {
     group: "SUDO",
     permissions: ["ALL_PERMISSIONS", "IMPORT_MEDECINES"],
   },
@@ -37,7 +41,6 @@ const appPersmissions = [
     permissions: ["VIEW_PATIENTS", "UPDATE_PATIENTS"],
   },
 ] as const;
-
 export type GroupedPermissions = typeof appPersmissions;
 export type PermissionsGroups = GroupedPermissions[number];
 export type PermissionGroup = GroupedPermissions[number]["group"];
