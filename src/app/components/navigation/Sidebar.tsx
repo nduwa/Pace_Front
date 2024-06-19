@@ -23,6 +23,7 @@ import { AuthContext } from "../../context/Auth";
 import { useQuery } from "@tanstack/react-query";
 import { FORMS_LOCATIONS } from "../../utils/constants/queryKeys";
 import { getLocations } from "../../apis/forms";
+import { Permission } from "../../constants/permissions";
 
 const Sidebar = () => {
   const isSudo = HasPermission(["ALL_PERMISSIONS"], true);
@@ -41,16 +42,18 @@ const Sidebar = () => {
     if (!formLinks && locations !== undefined) {
       setFormLinks(
         locations.map((loc) => {
+          let permission: Permission[] = ["RECEIPTION"];
+          if (loc === "COUNTER") permission.push("COUNTER");
+          else if (loc === "PHARMACY") permission.push("PHARMACY");
+          else if (loc === "LABORATORY") permission.push("LABORATORY");
+          else if (loc === "ARCHIVE") {
+          } else {
+            permission.push("CONSULTATION");
+          }
           return {
             to: `/forms/${loc}`,
             label: loc,
-            permissions: [
-              "CONSULTATION",
-              "LABORATORY",
-              "PHARMACY",
-              "RECEIPTION",
-              "COUNTER",
-            ],
+            permissions: permission,
           };
         }),
       );
@@ -69,6 +72,10 @@ const Sidebar = () => {
       links.push({
         label: "Roles",
         to: "/roles",
+      });
+      links.push({
+        label: "Settings",
+        to: "/settings",
       });
 
       setManageLinks(links);

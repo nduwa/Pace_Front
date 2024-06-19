@@ -1,6 +1,7 @@
 import ConsultationsPage from "../pages/consultations/ConsultationsPage";
 import BranchesPage from "../pages/institution/Branches";
 import InstitutionsPage from "../pages/institution/InstitutionsPage";
+import SettingPage from "../pages/institution/SettingPage";
 import { IRoute } from "../types/common";
 
 const institionsRoute: IRoute[] = [
@@ -18,6 +19,12 @@ const institionsRoute: IRoute[] = [
   {
     path: "consultations",
     element: ConsultationsPage,
+    allowedPermissionGroup: ["ADMIN"],
+  },
+
+  {
+    path: "settings",
+    element: SettingPage,
     allowedPermissionGroup: ["ADMIN"],
   },
 ];

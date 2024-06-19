@@ -6,17 +6,23 @@ import toast from "react-hot-toast";
 import { IInstitution, IInstitutionRequest } from "../../types/common";
 import { institutionSchema } from "../../utils/schemas/institution.schema";
 import { createInstitution, updateInstitution } from "../../apis/institution";
-import { INSTITUTIONS } from "../../utils/constants/queryKeys";
+import { INSTITUTIONS, USER_PROFILE } from "../../utils/constants/queryKeys";
 import TextField from "../common/form/TextField";
 import OptionsField from "../common/form/OptionsField";
 import Button from "../common/form/Button";
+import Checkbox from "../common/form/Checkbox";
 
 interface IInstitutionUpdateForm {
   institution?: IInstitution;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+  settingUpdate?: boolean;
 }
 
-const InstitutionForm: FC<IInstitutionUpdateForm> = ({ institution, setIsOpen }) => {
+const InstitutionForm: FC<IInstitutionUpdateForm> = ({
+  institution,
+  setIsOpen,
+  settingUpdate = false,
+}) => {
   const queryClient = useQueryClient();
   const {
     register,
@@ -40,9 +46,10 @@ const InstitutionForm: FC<IInstitutionUpdateForm> = ({ institution, setIsOpen })
         {
           onSuccess() {
             toast.success("Institution updated successfully");
-            setIsOpen(false);
+            setIsOpen && setIsOpen(false);
             queryClient.invalidateQueries(INSTITUTIONS);
-            reset();
+            !settingUpdate && reset();
+            settingUpdate && queryClient.invalidateQueries(USER_PROFILE);
           },
         },
       );
@@ -50,7 +57,7 @@ const InstitutionForm: FC<IInstitutionUpdateForm> = ({ institution, setIsOpen })
       createInstitutionMutation.mutate(data, {
         onSuccess() {
           toast.success("Institution created successfully");
-          setIsOpen(false);
+          setIsOpen && setIsOpen(false);
           queryClient.invalidateQueries(INSTITUTIONS);
           reset();
         },
@@ -71,7 +78,7 @@ const InstitutionForm: FC<IInstitutionUpdateForm> = ({ institution, setIsOpen })
             register={register("name")}
           />
         </div>
-        <div className='block'>
+        <div className={`${institution ? "hidden" : "block"}`}>
           <OptionsField
             label='Type'
             register={register("institutionType")}
@@ -99,12 +106,33 @@ const InstitutionForm: FC<IInstitutionUpdateForm> = ({ institution, setIsOpen })
             register={register("details.location")}
           />
         </div>
+        {settingUpdate &&
+          institution &&
+          institution.institutionType === "CLINIC" && (
+            <div className='mt-2 flex flex-col gap-4'>
+              <Checkbox
+                label='Has Pharmacy (can distibute med)'
+                register={register("hasPharmacy")}
+                checked={true}
+              />
+            </div>
+          )}
 
         <div className='mt-4'>
-          <div className='text-lg text-darkblue font-base'>User details</div>
-          <p className='text-sm'>
-            This will be the admin as default, and the contact info for institution
-          </p>
+          {institution && (
+            <>
+              <div className='text-lg text-darkblue font-base'>Admin details</div>
+            </>
+          )}
+          {!institution && (
+            <>
+              <div className='text-lg text-darkblue font-base'>User details</div>
+              <p className='text-sm'>
+                This will be the admin as default, and the contact info for
+                institution
+              </p>
+            </>
+          )}
 
           <div className='mt-2 flex flex-col gap-4'>
             <TextField

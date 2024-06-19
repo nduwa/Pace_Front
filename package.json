@@ -6,7 +6,7 @@
   "engines": {
     "npm": "please-use-pnpm",
     "pnpm": ">= 8.6.3",
-    "node": "18.17.1"
+    "node": ">18.17.1"
   },
   "scripts": {
     "dev": "tsc-watch --onSuccess 'vite'",
