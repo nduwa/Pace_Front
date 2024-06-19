@@ -65,6 +65,7 @@ export interface IInstitution {
   id: string;
   name: string;
   institutionType: string;
+  hasPharmacy?: boolean;
   admin: {
     name: string;
     phone: string;
@@ -83,9 +84,13 @@ export interface IInstitution {
 }
 
 export interface IInstitutionRequest
-  extends Omit<IInstitution, "id" | "createdAt" | "institutionType"> {
+  extends Omit<
+    IInstitution,
+    "id" | "createdAt" | "institutionType" | "hasPharmacy"
+  > {
   id?: string;
   institutionType?: string | null;
+  hasPharmacy?: boolean;
 }
 export interface ICreateBranch {
   name: string;
