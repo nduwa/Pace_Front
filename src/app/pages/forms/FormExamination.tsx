@@ -39,8 +39,6 @@ const FormExamination: FC<props> = ({ data }) => {
     },
   });
 
-  console.log(errors);
-
   const consultationMutation = useMutation(examination);
   const onSubmit = (data: Partial<IFormExamRequest>) => {
     console.log(data);
@@ -63,22 +61,98 @@ const FormExamination: FC<props> = ({ data }) => {
     };
     consultationMutation.mutate({ ...data, id } as IFormExamRequest, {
       onSuccess: () => {
-        toast.success("Consultation saved");
+        toast.success("Examination saved");
       },
     });
   };
 
   return (
-    <PageContent className='w-full' title={`Consultation ${data?.formNO}`}>
+    <PageContent
+      className='w-full'
+      title={`${data?.at} : Form ${data?.formNO}`}
+      actionsComponent={<SendForm form={data} reload={true} />}
+    >
       <Protected permissions={["LABORATORY"]}>
+        <div className='flex flex-col bg-white rounded-md p-8 mb-8'>
+          <p className='font-bold text-md mb-2'>{data.patient.name}</p>
+          <p className='text-garay-500'>{data.patient.phone}</p>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-8'>
-            <div className='grid md:grid-cols-2 gap-8'>
-              <div className='flex justify-between bg-white p-8 rounded-md'>
-                <div>
+            <div className='grid lg:grid-cols-3 gap-8'>
+              <div className='w-full bg-white p-8 rounded-md lg:col-span-2'>
+                {" "}
+                {/* You missed the `md` class here */}
+                <table className='w-full border-spacing-4 border-separate'>
+                  <thead>
+                    <tr>
+                      <th className='text-left'>Exam</th>
+                      <th className='text-left'>Result</th>
+                      <th className='text-left'>Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.exams?.map((takenExam, index) => (
+                      <tr
+                        key={index}
+                        className=' border border-dashed border-b rounded-md p-3 my-3'
+                      >
+                        <td className='px-2'>
+                          {takenExam.exam?.exam_code} {takenExam.exam?.name}
+                        </td>
+                        <td className='px-2'>
+                          {takenExam.invoiceId == null && (
+                            <OptionsField
+                              required
+                              error={
+                                errors.exams
+                                  ? errors.exams[index]?.examId?.message
+                                  : undefined
+                              }
+                              register={register(`exams.${index}.result`)}
+                              options={[
+                                { label: "Pending", value: "", selected: true },
+                                { label: "Positive", value: "true" },
+                                { label: "Negative", value: "false" },
+                              ]}
+                            />
+                          )}
+                          {takenExam.invoiceId !== null && (
+                            <Status
+                              status={takenExam?.result}
+                              trueText='Positive'
+                              falseText='Negative'
+                            />
+                          )}
+                        </td>
+                        <td className='px-2'>
+                          {takenExam.invoiceId == null && (
+                            <TextField
+                              type='text'
+                              error={
+                                errors.exams
+                                  ? errors.exams[index]?.examId?.message
+                                  : undefined
+                              }
+                              register={register(`exams.${index}.comment`)}
+                            />
+                          )}
+                          {takenExam.invoiceId !== null && <>{takenExam.comment}</>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className='flex align-right pl-4'>
+                  <Button label='Save' isLoading={consultationMutation.isLoading} />
+                </div>
+              </div>
+              <div className='flex flex-col gap-8  justify-between '>
+                <div className='bg-white p-8 rounded-md'>
                   <p>Date:{format(new Date(data.createdAt), "dd-MM-yyyy")}</p>
                   <p>Served By: {data.institution?.name}</p>
                   <p>Form NO: {data.formNO}</p>
+                  <p>From: {data.from}</p>
                   <p>At: {data.at}</p>
                   {data.patient && (
                     <>
@@ -87,95 +161,24 @@ const FormExamination: FC<props> = ({ data }) => {
                       <p>ID Index: {data.patient.NIDIndex}</p>
                     </>
                   )}
-                  <div className='flex align-right'>
-                    <SendForm form={data} reload={true} />
-                    <Button
-                      label='Save'
-                      isLoading={consultationMutation.isLoading}
-                    />
+                </div>
+                <div className='w-full bg-white p-8 rounded-md'>
+                  <div className='block'>
+                    <div className='flex flex-col gap-6'>
+                      {data.consultations?.map((consultation, index) => (
+                        <div key={index}>
+                          <div className='font-bold'>
+                            {consultation.consultation.label}
+                          </div>
+                          <div className='text-gray-600 text-sm'>
+                            {consultation.verdict}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className='w-full bg-white p-8 rounded-md'>
-                <div className='block'>
-                  <div className='flex flex-col gap-6'>
-                    {data.consultations?.map((consultation, index) => (
-                      <div key={index}>
-                        <div className='font-bold'>
-                          {consultation.consultation.label}
-                        </div>
-                        <div className='text-gray-600 text-sm'>
-                          {consultation.verdict}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='w-full bg-white p-8 rounded-md'>
-              {" "}
-              {/* You missed the `md` class here */}
-              <table className='w-full border-spacing-4 border-separate'>
-                <thead>
-                  <tr>
-                    <th className='text-left'>Exam</th>
-                    <th className='text-left'>Result</th>
-                    <th className='text-left'>Comment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.exams?.map((takenExam, index) => (
-                    <tr
-                      key={index}
-                      className=' border border-dashed border-b rounded-md p-3 my-3'
-                    >
-                      <td className='px-2'>
-                        {takenExam.exam?.exam_code} {takenExam.exam?.name}
-                      </td>
-                      <td className='px-2'>
-                        {takenExam.invoiceId == null && (
-                          <OptionsField
-                            required
-                            error={
-                              errors.exams
-                                ? errors.exams[index]?.examId?.message
-                                : undefined
-                            }
-                            register={register(`exams.${index}.result`)}
-                            options={[
-                              { label: "Pending", value: "", selected: true },
-                              { label: "Positive", value: "true" },
-                              { label: "Negative", value: "false" },
-                            ]}
-                          />
-                        )}
-                        {takenExam.invoiceId !== null && (
-                          <Status
-                            status={takenExam?.result}
-                            trueText='Positive'
-                            falseText='Negative'
-                          />
-                        )}
-                      </td>
-                      <td className='px-2'>
-                        {takenExam.invoiceId == null && (
-                          <TextField
-                            type='text'
-                            error={
-                              errors.exams
-                                ? errors.exams[index]?.examId?.message
-                                : undefined
-                            }
-                            register={register(`exams.${index}.comment`)}
-                          />
-                        )}
-                        {takenExam.invoiceId !== null && <>{takenExam.comment}</>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         </form>

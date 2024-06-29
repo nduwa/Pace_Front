@@ -233,7 +233,11 @@ const Sidebar = () => {
                     Icon={<DocumentCheckIcon className='w-5 stroke-2 text-white' />}
                   />
                 )}
+              </>
+            )}
 
+            {user?.institution && user.institution.institutionType == "PHARMACY" && (
+              <>
                 {HasPermission(["SERVE_MEDECINES"]) && (
                   <SidebarLink
                     text='Serve Medecine'

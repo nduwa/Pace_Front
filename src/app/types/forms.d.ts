@@ -9,6 +9,7 @@ export interface IForm {
   patientId: string;
   formNO: string;
   at: string;
+  from: string;
   isOpen: boolean;
   details: {
     temperature: number | null;
@@ -90,7 +91,8 @@ export interface IFormDrug {
   user?: IUser;
 }
 
-export interface IFormRequest extends Pick<IForm, "patientId" | "details" | "at"> {
+export interface IFormRequest
+  extends Pick<IForm, "patientId" | "details" | "at" | "from"> {
   id?: string;
 }
 

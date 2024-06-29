@@ -1,5 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState, SetStateAction, Dispatch, FC, useEffect } from "react";
+import {
+  useState,
+  SetStateAction,
+  Dispatch,
+  FC,
+  useEffect,
+  useContext,
+} from "react";
 import Button from "../../components/common/form/Button";
 import { IPaged } from "../../types/common";
 import PageContent from "../../components/common/PageContent";
@@ -12,25 +19,31 @@ import { EXAMS } from "../../utils/constants/queryKeys";
 import { IExam, IExamResponse } from "../../types/exams";
 import { getExams } from "../../apis/exams";
 import Protected from "../../components/auth/Protected";
+import { AuthContext } from "../../context/Auth";
+import { examPrice } from "../../constants/helperFunctions";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  adminLevel: boolean;
 }
 
-const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
+const ActionsComponent: FC<IActionComponent> = ({ setIsOpen, adminLevel }) => {
   const openCreateExamModal = () => {
     setIsOpen(true);
   };
   return (
     <>
-      <Protected permissions={["UPDATE_EXAMS"]}>
-        <Button onClick={openCreateExamModal} label='Add exam' />
-      </Protected>
+      {adminLevel && (
+        <Protected permissions={["UPDATE_EXAMS"]}>
+          <Button onClick={openCreateExamModal} label='Add exam' />
+        </Protected>
+      )}
     </>
   );
 };
 
 const ExamsPage = () => {
+  const user = useContext(AuthContext)?.userProfile;
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<IPaged<IExamResponse>>();
   const [keyword, setKeyword] = useState<string>();
@@ -64,7 +77,12 @@ const ExamsPage = () => {
     <PageContent
       isLoading={isLoading}
       title='Exams'
-      actionsComponent={<ActionsComponent setIsOpen={setIsOpen} />}
+      actionsComponent={
+        <ActionsComponent
+          setIsOpen={setIsOpen}
+          adminLevel={user?.institutionId === null}
+        />
+      }
     >
       <>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title='Create exam'>
@@ -93,6 +111,7 @@ const ExamsPage = () => {
             {
               title: "Price",
               key: "price",
+              render: (row: IExam) => <>{examPrice(row)}</>,
             },
             {
               title: "Actions",
@@ -100,7 +119,10 @@ const ExamsPage = () => {
               render: (row: IExam) => {
                 return (
                   <TableActions>
-                    <ExamTableActions exam={row} />
+                    <ExamTableActions
+                      exam={row}
+                      adminLevel={user?.institutionId === null}
+                    />
                   </TableActions>
                 );
               },

@@ -142,5 +142,5 @@ export const getdrugCategoriesNPaged = async (): Promise<IDrugCategory[]> => {
 export const updateDrugPrice = async (
   data: IPriceChange,
 ): Promise<IDrugCategory> => {
-  return (await api.put(`/drugs/${data.id}/priceS`, data)).data;
+  return (await api.put(`/drugs/${data.id}/prices`, data)).data;
 };

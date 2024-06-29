@@ -11,7 +11,11 @@ type props = {
 
 const FormDetails: FC<props> = ({ data }) => {
   return (
-    <PageContent className='w-full' title={`Consultation ${data?.formNO}`}>
+    <PageContent
+      className='w-full'
+      title={`${data?.at} : Form ${data?.formNO}`}
+      actionsComponent={<SendForm form={data} reload={true} />}
+    >
       <div className='flex flex-col gap-8'>
         <div className='grid md:grid-cols-2 gap-8'>
           <div className='flex justify-between bg-white p-8 rounded-md'>
@@ -20,7 +24,7 @@ const FormDetails: FC<props> = ({ data }) => {
               <p>Date:{format(new Date(data.createdAt), "dd-MM-yyyy")}</p>
               <p>Served By: {data.institution?.name}</p>
               <p>Form NO: {data.formNO}</p>
-              <p className='mt-2'>At: {data.at}</p>
+              <p className='mt-2'>From: {data.from}</p>
               {data.patient && (
                 <>
                   <p>PatientNO: {data.patient.patientNO}</p>
@@ -28,9 +32,6 @@ const FormDetails: FC<props> = ({ data }) => {
                   <p>ID Index: {data.patient.NIDIndex}</p>
                 </>
               )}
-              <div className='flex align-right'>
-                <SendForm form={data} reload={true} />
-              </div>
             </div>
           </div>
           <div className='w-full bg-white p-8 rounded-md'>

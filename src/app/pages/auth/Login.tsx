@@ -6,7 +6,6 @@ import { LoginSchema } from "../../utils/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../apis/auth";
-import toast from "react-hot-toast";
 import TextField from "../../components/common/form/TextField";
 import PasswordField from "../../components/common/form/PasswordField";
 import Button from "../../components/common/form/Button";
@@ -34,9 +33,6 @@ const Login = () => {
           tokenType: "Bearer",
         });
         navigate("/");
-      },
-      onError() {
-        toast.error("Invalid credentials!");
       },
     });
   };

@@ -1,6 +1,7 @@
 import { IExam, IExamRequest, IExamResponse } from "../types/exams";
 import api from "./api";
 import { IPaged, IUUID } from "../types/common";
+import { IPriceChange } from "../types/pharmacy";
 
 export const createExam = async (data: IExamRequest): Promise<IExam> => {
   return (await api.post("/exams", data)).data;
@@ -25,4 +26,8 @@ export const getExams = async (params?: string): Promise<IPaged<IExamResponse>> 
 
 export const getexams = async (): Promise<IExam[]> => {
   return (await api.get(`/exams/all`)).data;
+};
+
+export const updateExamPrice = async (data: IPriceChange): Promise<IExam> => {
+  return (await api.put(`/exams/${data.id}/prices`, data)).data;
 };

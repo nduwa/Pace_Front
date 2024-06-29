@@ -86,7 +86,11 @@ const FormConsultation: FC<props> = ({ data, exams, drugs }) => {
     }
   }, [data]);
   return (
-    <PageContent className='w-full' title={`Consultation ${data?.formNO}`}>
+    <PageContent
+      className='w-full'
+      title={`${data?.at} : Form ${data?.formNO}`}
+      actionsComponent={<SendForm form={data} reload={true} />}
+    >
       <Protected permissions={["CONSULTATION"]}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {isUpdatable === true && (
@@ -98,6 +102,7 @@ const FormConsultation: FC<props> = ({ data, exams, drugs }) => {
                     <p>Date:{format(new Date(data.createdAt), "dd-MM-yyyy")}</p>
                     <p>Served By: {data.institution?.name}</p>
                     <p>Form NO: {data.formNO}</p>
+                    <p>From: {data.from}</p>
                     {data.patient && (
                       <>
                         <p>PatientNO: {data.patient.patientNO}</p>
@@ -106,7 +111,6 @@ const FormConsultation: FC<props> = ({ data, exams, drugs }) => {
                       </>
                     )}
                     <div className='flex align-right'>
-                      <SendForm form={data} reload={true} />
                       {isUpdatable && (
                         <Button
                           label='Save'
