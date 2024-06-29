@@ -9,6 +9,16 @@ export interface IExam {
   name: string;
   price: number;
   createdAt: Date;
+
+  institutionExam?: IInstitutionExam[];
+}
+
+export interface IInstitutionExam {
+  id: string;
+  institutionId: string;
+  examId: string;
+  price: number;
+  createdAt: Date;
 }
 
 export interface IExamRequest

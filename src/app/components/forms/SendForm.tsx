@@ -36,7 +36,7 @@ const SendFormModal: FC<props> = ({ form, setIsOpen, reload = false }) => {
     resolver: zodResolver(sendFromSchema),
     defaultValues: {
       id: form.id,
-      to: form.at,
+      to: form.from,
     },
   });
 
@@ -69,7 +69,10 @@ const SendFormModal: FC<props> = ({ form, setIsOpen, reload = false }) => {
             error={errors.to?.message}
             required={true}
             defaultLabel='Select location'
-            options={locations?.map((location) => ({
+            options={(form.at == "LABORATORY"
+              ? locations?.filter((loc) => loc == form.from)
+              : locations
+            )?.map((location) => ({
               value: location,
               label: location,
             }))}

@@ -41,7 +41,9 @@ const TextField: FC<ITextField> = ({
           type={type}
           defaultValue={value}
           onChange={(e) => onValueChage && onValueChage(e.target.value)}
-          className={`${additionalClass} block w-full rounded-md border-0 py-2 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-1 focus:ring-inset ${
+          className={`${additionalClass} block w-full rounded-md border-0 py-2 px-1.5 text-gray-900  ${
+            disabled ? "bg-inherit" : "ring-1 ring-inset shadow-sm"
+          } focus:ring-1 focus:ring-inset ${
             error
               ? `focus:ring-red-500 ring-red-300 placeholder:text-red-400`
               : `focus:ring-green ring-gray-300 placeholder:text-gray-400`

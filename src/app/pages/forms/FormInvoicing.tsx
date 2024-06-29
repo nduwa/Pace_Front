@@ -26,11 +26,7 @@ type mainProps = {
 
 const FormInvoicingBody: FC<mainProps> = ({ invoiceData }) => {
   let totalCost = 0;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Partial<IFormInvoiceRequest>>({
+  const { register, handleSubmit } = useForm<Partial<IFormInvoiceRequest>>({
     resolver: zodResolver(formInvoiceRequestSchema),
     defaultValues: {
       invoiceExams: invoiceData.invoiceExams.map((i) => {
@@ -70,24 +66,19 @@ const FormInvoicingBody: FC<mainProps> = ({ invoiceData }) => {
     );
   };
 
-  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex justify-between bg-white p-8 mt-6 rounded-md'
+      className='flex justify-between bg-white rounded-md lg:col-span-2'
     >
       <div className='flex flex-col gap-8'>
         <div className='w-full bg-white p-8 rounded md'>
           <div className='flex space-x-3 items-center'>
-            <div className='items-center flex '>
-              <div className='py-2 px-3 bg-gray-100 mt-4'>{totalCost} RWF</div>
+            <div className='items-center flex my-4 '>
+              <div className='py-2 px-3 bg-gray-100'>{totalCost} RWF</div>
             </div>
 
-            <Button
-              label='Save'
-              isLoading={saveInvoiceMutation.isLoading}
-              className='mt-4'
-            />
+            <Button label='Save' isLoading={saveInvoiceMutation.isLoading} />
           </div>
           <table className='w-full border-spacing-4 border border-1 border-separate'>
             <thead>
@@ -267,15 +258,27 @@ const FormInvoicing: FC<props> = ({ data }) => {
   });
 
   return (
-    <PageContent className='w-full' title={`Consultation ${data?.formNO}`}>
+    <PageContent
+      className='w-full'
+      title={`${data.at} ${data?.formNO}`}
+      actionsComponent={<SendForm form={data} reload={true} />}
+    >
       <Protected permissions={["CONSULTATION"]}>
-        <div className='grid md:grid-cols-2 gap-8'>
+        <div className='flex flex-col bg-white rounded-md p-8 mb-8'>
+          <p className='font-bold text-md mb-2'>{data.patient.name}</p>
+          <p className='text-garay-500'>{data.patient.phone}</p>
+        </div>
+        <div className='grid lg:grid-cols-3 gap-8'>
+          {invoiceData && (
+            <FormInvoicingBody data={data} invoiceData={invoiceData} />
+          )}
+
           <div className='flex justify-between bg-white p-8 rounded-md'>
             <div>
               <p>Date:{format(new Date(data.createdAt), "dd-MM-yyyy")}</p>
               <p>Served By: {data.institution?.name}</p>
               <p>Form NO: {data.formNO}</p>
-              <p>At: {data.at}</p>
+              <p>From: {data.from}</p>
               {data.patient && (
                 <>
                   <p>PatientNO: {data.patient.patientNO}</p>
@@ -283,30 +286,9 @@ const FormInvoicing: FC<props> = ({ data }) => {
                   <p>ID Index: {data.patient.NIDIndex}</p>
                 </>
               )}
-              <div className='flex align-right'>
-                <SendForm form={data} reload={true} />
-              </div>
-            </div>
-          </div>
-          <div className='w-full bg-white p-8 rounded-md'>
-            <div className='block'>
-              <div className='flex flex-col gap-6'>
-                {data.consultations?.map((consultation, index) => (
-                  <div key={index}>
-                    <div className='font-bold'>
-                      {consultation.consultation.label}
-                    </div>
-                    <div className='text-gray-600 text-sm'>
-                      {consultation.verdict}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
-
-        {invoiceData && <FormInvoicingBody data={data} invoiceData={invoiceData} />}
       </Protected>
     </PageContent>
   );
