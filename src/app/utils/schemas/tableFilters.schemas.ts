@@ -18,6 +18,12 @@ export const patientInvoiceFilterSchema = z.object({
   institution: z.string(),
 });
 
+export const transactionFilterSchema = z.object({
+  startDate: z.string(),
+  endDate: z.string(),
+  type: z.string(),
+});
+
 export const formFilterSchema = z.object({
   at: z.string(),
   isOpen: z.string(),

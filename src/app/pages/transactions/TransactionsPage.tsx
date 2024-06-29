@@ -16,14 +16,12 @@ import TableActions from "../../components/table/TableActions";
 import TransactionForm from "../../components/transactions/TransactionForm";
 import TransactionTableActions from "../../components/transactions/TransactionTableActions";
 import { TRANSACTIONS } from "../../utils/constants/queryKeys";
+import { format } from "date-fns";
+import TransactionTableFilters from "../../components/transactions/TransactionTableFilters";
 
 interface IActionComponent {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
-
-const Filters = () => {
-  return <div>Filters component</div>;
-};
 
 const ActionsComponent: FC<IActionComponent> = ({ setIsOpen }) => {
   const openCreateTransactionModal = () => {
@@ -40,6 +38,9 @@ const TransactionsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<IPaged<ITransactionResponse>>();
   const [keyword, setKeyword] = useState<string>();
+  const [filters, setFilters] = useState<string>();
+
+  const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const { isLoading, data: response } = useQuery({
     queryFn: () => getTransactions(""),
     queryKey: TRANSACTIONS,
@@ -47,15 +48,29 @@ const TransactionsPage = () => {
   const transactionsMutation = useMutation(getTransactions);
   const handleSearch = (searchq: string) => {
     setKeyword(searchq);
-    transactionsMutation.mutate(`?searchq=${searchq}&page=1`, {
+    transactionsMutation.mutate(`?searchq=${searchq}&page=1&${filters}`, {
       onSuccess(result) {
         setData(result);
       },
     });
   };
+
+  const handleFilter = (appliedFilters: string) => {
+    setFilters(appliedFilters);
+    setFiltersLoading(true);
+    transactionsMutation.mutate(`?searchq=${keyword || ""}&${appliedFilters}`, {
+      onSuccess(result) {
+        setFiltersLoading(false);
+        setData(result);
+      },
+      onError() {
+        setFiltersLoading(false);
+      },
+    });
+  };
   const onChangePage = (page: number) => {
     transactionsMutation.mutate(
-      `?page=${page}${keyword ? `&searchq=${keyword}` : ``}`,
+      `?page=${page}${keyword ? `&searchq=${keyword}` : ``}&${filters}`,
       {
         onSuccess(result) {
           setData(result);
@@ -63,6 +78,13 @@ const TransactionsPage = () => {
       },
     );
   };
+  const defaultFilters = data?.data
+    ? {
+        type: data.data.type,
+        startDate: data.data.startDate,
+        endDate: data.data.endDate,
+      }
+    : undefined;
   useEffect(() => {
     if (response) {
       setData(response);
@@ -85,7 +107,8 @@ const TransactionsPage = () => {
         </Modal>
 
         <Table
-          // isLoading={isLoading}
+          isLoading={isLoading}
+          hideFilters={!filtersLoading}
           currentPage={data?.currentPage || 1}
           totalItems={data?.totalItems || 30}
           itemsPerPage={data?.itemsPerPage || 15}
@@ -108,6 +131,13 @@ const TransactionsPage = () => {
               key: "type",
             },
             {
+              title: "Date",
+              key: "",
+              render: (row: ITransaction) => (
+                <>{format(new Date(row.createdAt), "dd-MM-yyyy")}</>
+              ),
+            },
+            {
               title: "By",
               key: "amount",
               render: (row: ITransactionDTO) => row.user.name,
@@ -127,7 +157,13 @@ const TransactionsPage = () => {
           ]}
           data={data?.data.rows || []}
           searchFun={handleSearch}
-          filtersComponent={<Filters />}
+          filtersComponent={
+            <TransactionTableFilters
+              isLoading={filtersLoading}
+              defaultValues={defaultFilters}
+              filterFunc={handleFilter}
+            />
+          }
         />
       </>
     </PageContent>

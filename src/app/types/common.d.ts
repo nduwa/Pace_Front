@@ -159,6 +159,7 @@ export interface ITransaction {
   reason: string;
   reference: string;
   type: string;
+  createdAt: Date;
 }
 
 export interface ITransactionRequest
@@ -173,6 +174,8 @@ export interface ITransactionDTO extends ITransaction {
 
 export interface ITransactionResponse {
   type: string;
+  startDate: string;
+  endDate: string;
   rows: ITransactionDTO[];
 }
 

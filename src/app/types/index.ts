@@ -12,3 +12,20 @@ export interface SidebarLinkProps {
   Icon: ReactElement;
   to: string;
 }
+
+export interface IDashboard {
+  drugsCount: number;
+  drugsInStock: number;
+  usersCount: number;
+  examsCount: number;
+  institutionsCount: number;
+  institutionBranchesCount: number;
+  openFormsCount: number;
+}
+
+export interface IDashboardTransactions {
+  income: number;
+  expense: number;
+  purchased: number;
+  invoiced: number;
+}
